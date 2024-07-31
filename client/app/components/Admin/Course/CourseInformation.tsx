@@ -75,7 +75,7 @@ const CourseInformation: FC<Props> = ({
     <div className="w-[80%] m-auto mt-24">
       <form onSubmit={handleSubmit} className={`${styles.label}`}>
         <div>
-          <label htmlFor="">Course Name</label>
+          <label htmlFor="">Subject Name(E.G:- Physics)</label>
           <input
             type="name"
             name=""
@@ -85,7 +85,7 @@ const CourseInformation: FC<Props> = ({
               setCourseInfo({ ...courseInfo, name: e.target.value })
             }
             id="name"
-            placeholder="Enter Course Name"
+            placeholder="Enter Subject Name of the Exams"
             className={`
             ${styles.input}`}
           />
