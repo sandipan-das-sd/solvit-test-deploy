@@ -155,7 +155,7 @@ const CourseInformation: FC<Props> = ({
         <div className="w-full flex justify-between">
           <div className="w-[45%]">
             <label className={`${styles.label}`} htmlFor="email">
-              Course Tags
+              Course Tags/Exam Name
             </label>
             <input
               type="text"
@@ -171,7 +171,7 @@ const CourseInformation: FC<Props> = ({
             ${styles.input}`}
             />
           </div>
-          <div className="w-[50%]">
+          {/* <div className="w-[50%]">
             <label className={`${styles.label} w-[50%]`}>Select exams</label>
             <select
               name="categories"
@@ -196,7 +196,7 @@ const CourseInformation: FC<Props> = ({
                   </option>
                 ))}
             </select>
-          </div>
+          </div> */}
         </div>
         <br />
         <div></div>
