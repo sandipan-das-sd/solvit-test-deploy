@@ -94,7 +94,7 @@ const EditCategories = (props: Props) => {
                   <div className="flex items-center w-full justify-center">
                     <input
                       className={`${styles.input} !w-[unset] !border-none !text-[20px]`}
-                      value={item.title}
+                      value={item.categories}
                       onChange={(e) =>
                         handleCategoriesAdd(item._id, e.target.value)
                       }
