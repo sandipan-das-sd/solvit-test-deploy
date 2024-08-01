@@ -98,7 +98,7 @@ const EditCategories = (props: Props) => {
                       onChange={(e) =>
                         handleCategoriesAdd(item._id, e.target.value)
                       }
-                      placeholder="Enter category title..."
+                      placeholder="Enter Exams Here..."
                     />
                     <AiOutlineDelete
                       className="dark:text-white text-black text-[18px] cursor-pointer"

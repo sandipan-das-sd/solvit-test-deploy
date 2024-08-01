@@ -165,8 +165,8 @@ const CourseInformation: FC<Props> = ({
           <div className="w-[50%]">
             <label className={`${styles.label} w-[50%]`}>Select exams</label>
             <select
-              name=""
-              id=""
+              name="categories"
+              id="categories"
               className={`${styles.input}`}
               value={courseInfo.category}
               onChange={(e: any) =>
