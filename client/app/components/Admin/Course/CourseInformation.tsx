@@ -20,11 +20,20 @@ const CourseInformation: FC<Props> = ({
   const { data } = useGetHeroDataQuery("Categories", {});
   const [categories, setCategories] = useState([]);
 
+  // useEffect(() => {
+  //   if (data) {
+  //     setCategories(data.layout?.categories);
+  //   }
+  // }, [data]);
+
   useEffect(() => {
-    if (data) {
-      setCategories(data.layout?.categories);
+    console.log("Fetched data:", data);
+    if (data && data.layout?.categories) {
+      setCategories(data.layout.categories);
     }
+    console.log("Categories state:", categories);
   }, [data]);
+
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
