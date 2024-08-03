@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import AdminSidebar from "../../components/Admin/sidebar/AdminSidebar";
+import AdminSidebar from "../../components/Admin/Sidebar/AdminSidebar";
 import Heading from "../../../app/utils/Heading";
 import OrdersAnalytics from "../../components/Admin/Analytics/OrdersAnalytics";
 import DashboardHeader from "../../../app/components/Admin/DashboardHeader";
