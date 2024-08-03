@@ -1,9 +1,9 @@
 "use client";
 import React from "react";
-import AdminSidebar from "../../components/Admin/Sidebar/AdminSidebar";
-import Heading from "../../utils/Heading";
+import AdminSidebar from "../../components/Admin/sidebar/AdminSidebar";
+import Heading from "../../../app/utils/Heading";
 import CourseAnalytics from "../../components/Admin/Analytics/CourseAnalytics";
-import DashboardHeader from "../../components/Admin/DashboardHeader";
+import DashboardHeader from "../../../app/components/Admin/DashboardHeader";
 
 type Props = {};
 
@@ -13,7 +13,7 @@ const page = (props: Props) => {
       <Heading
         title="SolviT - Admin"
         description="SolviT is a platform for students to learn and get help from teachers"
-        keywords="WBJee, NEET"
+        keywords="Prograaming,MERN,Redux,Machine Learning"
       />
       <div className="flex">
         <div className="1500px:w-[16%] w-1/5">

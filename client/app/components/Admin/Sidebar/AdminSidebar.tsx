@@ -245,8 +245,15 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
             <Item
-              title="Exams"
+              title="Exam"
               to="/admin/categories"
+              icon={<WysiwygIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+            <Item
+              title="Years"
+              to="/admin/years"
               icon={<WysiwygIcon />}
               selected={selected}
               setSelected={setSelected}

@@ -20,7 +20,7 @@ export const coursesApi = apiSlice.injectEndpoints({
       }),
     }),
 
-    
+
     deleteCourse: builder.mutation({
       query: (id) => ({
         url: `delete-course/${id}`,
@@ -221,7 +221,7 @@ export const coursesApi = apiSlice.injectEndpoints({
       },
     }),
 
-   
+
     deleteQuestion: builder.mutation({
       query: ({ courseId, yearId, subjectId, questionId }) => ({
         url: `course/${courseId}/year/${yearId}/subject/${subjectId}/question/${questionId}`,

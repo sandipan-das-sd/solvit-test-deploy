@@ -36,7 +36,7 @@ const CreateCourse = (props: Props) => {
     estimatedPrice: "",
     tags: "",
     level: "",
-    // categories: "",
+   
     demoUrl: "",
     thumbnail: "",
   });
@@ -59,7 +59,9 @@ const CreateCourse = (props: Props) => {
     },
   ]);
 
+
   const [courseData, setCourseData] = useState({});
+
 
   const handleSubmit = async () => {
     // Format benefits array
@@ -91,7 +93,7 @@ const CreateCourse = (props: Props) => {
     const data = {
       name: courseInfo.name,
       description: courseInfo.description,
-      // categories: courseInfo.categories,
+   
       price: courseInfo.price,
       estimatedPrice: courseInfo.estimatedPrice,
       tags: courseInfo.tags,

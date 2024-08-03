@@ -62,5 +62,5 @@ export const {
   useUpdatePasswordMutation,
   useGetAllUsersQuery,
   useUpdateUserRoleMutation,
-  useDeleteUserMutation,
+  useDeleteUserMutation
 } = userApi;

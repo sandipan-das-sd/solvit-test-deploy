@@ -6,10 +6,10 @@ import {
 } from "@/redux/features/notifications/notificationsApi";
 import React, { FC, useEffect, useState } from "react";
 import { IoMdNotificationsOutline } from "react-icons/io";
-// import socketIO from "socket.io-client";
+import socketIO from "socket.io-client";
 import { format } from "timeago.js";
 const ENDPOINT = process.env.NEXT_PUBLIC_SOCKET_SERVER_URI || "";
-// const socketId = socketIO(ENDPOINT, { transports: ["websocket"] });
+const socketId = socketIO(ENDPOINT, { transports: ["websocket"] });
 
 type Props = {
   open?: boolean;
@@ -34,17 +34,6 @@ const DashboardHeader: FC<Props> = ({ open, setOpen }) => {
     audio.play();
   };
 
-  // useEffect(() => {
-  //   if (data) {
-  //     setNotifications(
-  //       data.notifications.filter((item: any) => item.status === "unread")
-  //     );
-  //   }
-  //   if (isSuccess) {
-  //     refetch();
-  //   }
-  //   audio.load();
-  // }, [data, isSuccess, audio]);
   useEffect(() => {
     if (data) {
       setNotifications(
@@ -55,13 +44,13 @@ const DashboardHeader: FC<Props> = ({ open, setOpen }) => {
       refetch();
     }
     audio.load();
-  }, [data, isSuccess, audio,refetch]);
+  }, [data, isSuccess,audio]);
 
   useEffect(() => {
-    // socketId.on("newNotification", (data) => {
-    //   refetch();
-    //   playNotificationSound();
-    // });
+    socketId.on("newNotification", (data) => {
+      refetch();
+      playNotificationSound();
+    });
   }, []);
 
   const handleNotificationStatusChange = async (id: string) => {

@@ -42,28 +42,6 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
     skip: !logout ? true : false,
   });
 
-  // useEffect(() => {
-  //   if (!isLoading) {
-  //     if (!userData) {
-  //       if (data) {
-  //         socialAuth({
-  //           email: data?.user?.email,
-  //           name: data?.user?.name,
-  //           avatar: data.user?.image,
-  //         });
-  //         refetch();
-  //       }
-  //     }
-  //     if (data === null) {
-  //       if (isSuccess) {
-  //         toast.success("Login Successfully");
-  //       }
-  //     }
-  //     if (data === null && !isLoading && !userData) {
-  //       setLogout(true);
-  //     }
-  //   }
-  // }, [data, userData, isLoading]);
   useEffect(() => {
     if (!isLoading) {
       if (!userData) {
@@ -85,8 +63,7 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
         setLogout(true);
       }
     }
-  }, [data, userData, isLoading, isSuccess, refetch, socialAuth]); // Added dependencies
-
+  }, [data, userData, isLoading]);
 
   if (typeof window !== "undefined") {
     window.addEventListener("scroll", () => {

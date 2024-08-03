@@ -16,7 +16,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 
 export {
-  HomeOutlinedIcon,
+    HomeOutlinedIcon,
   ArrowForwardIosIcon,
   ArrowBackIosIcon,
   PeopleOutlinedIcon,
@@ -32,4 +32,4 @@ export {
   ManageHistoryIcon,
   SettingsIcon,
   ExitToAppIcon,
-};
+}

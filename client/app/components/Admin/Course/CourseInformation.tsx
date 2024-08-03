@@ -1,6 +1,5 @@
 import { styles } from "@/app/styles/style";
 import { useGetHeroDataQuery } from "@/redux/features/layout/layoutApi";
-import Image from "next/image";
 import React, { FC, useEffect, useState } from "react";
 
 type Props = {
@@ -20,20 +19,11 @@ const CourseInformation: FC<Props> = ({
   const { data } = useGetHeroDataQuery("Categories", {});
   const [categories, setCategories] = useState([]);
 
-  // useEffect(() => {
-  //   if (data) {
-  //     setCategories(data.layout?.categories);
-  //   }
-  // }, [data]);
-
   useEffect(() => {
-    console.log("Fetched data:", data);
-    if (data && data.layout?.categories) {
-      setCategories(data.layout.categories);
+    if (data) {
+      setCategories(data.layout?.categories);
     }
-    console.log("Categories state:", categories);
   }, [data]);
-
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -84,7 +74,7 @@ const CourseInformation: FC<Props> = ({
     <div className="w-[80%] m-auto mt-24">
       <form onSubmit={handleSubmit} className={`${styles.label}`}>
         <div>
-          <label htmlFor="">Subject Name(E.G:- Physics)</label>
+          <label htmlFor="">Subject Name(E.G:-Physics)</label>
           <input
             type="name"
             name=""
@@ -94,7 +84,7 @@ const CourseInformation: FC<Props> = ({
               setCourseInfo({ ...courseInfo, name: e.target.value })
             }
             id="name"
-            placeholder="Enter Subject Name of the Exams"
+            placeholder="MERN stack LMS platform with next 13"
             className={`
             ${styles.input}`}
           />
@@ -155,7 +145,7 @@ const CourseInformation: FC<Props> = ({
         <div className="w-full flex justify-between">
           <div className="w-[45%]">
             <label className={`${styles.label}`} htmlFor="email">
-              Course Tags/Exam Name
+              Course Tags
             </label>
             <input
               type="text"
@@ -166,18 +156,20 @@ const CourseInformation: FC<Props> = ({
                 setCourseInfo({ ...courseInfo, tags: e.target.value })
               }
               id="tags"
-              placeholder="Wbjee, Neet"
+              placeholder="MERN,Next 13,Socket io,tailwind css,LMS"
               className={`
             ${styles.input}`}
             />
           </div>
-          {/* <div className="w-[50%]">
-            <label className={`${styles.label} w-[50%]`}>Select exams</label>
+          <div className="w-[50%]">
+            {/* <label className={`${styles.label} w-[50%]`}>
+              Course Categories
+            </label>
             <select
-              name="categories"
-              id="categories"
+              name=""
+              id=""
               className={`${styles.input}`}
-              value={courseInfo.categories}
+              value={courseInfo.category}
               onChange={(e: any) =>
                 setCourseInfo({ ...courseInfo, categories: e.target.value })
               }
@@ -195,11 +187,9 @@ const CourseInformation: FC<Props> = ({
                     {item.title}
                   </option>
                 ))}
-            </select>
-          </div> */}
+            </select> */}
+          </div>
         </div>
-        <br />
-        <div></div>
         <br />
         <div className="w-full flex justify-between">
           <div className="w-[45%]">
@@ -254,9 +244,9 @@ const CourseInformation: FC<Props> = ({
             onDrop={handleDrop}
           >
             {courseInfo.thumbnail ? (
-              <Image
+              <img
                 src={courseInfo.thumbnail}
-                alt="Course Thumbnil Image"
+                alt=""
                 className="max-h-full w-full object-cover"
               />
             ) : (

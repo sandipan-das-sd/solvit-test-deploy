@@ -98,7 +98,9 @@ export const authApi = apiSlice.injectEndpoints({
       }),
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
-          dispatch(userLoggedOut());
+          dispatch(
+            userLoggedOut()
+          );
         } catch (error: any) {
           console.log(error);
         }
@@ -112,5 +114,5 @@ export const {
   useActivationMutation,
   useLoginMutation,
   useSocialAuthMutation,
-  useLogOutQuery,
+  useLogOutQuery
 } = authApi;

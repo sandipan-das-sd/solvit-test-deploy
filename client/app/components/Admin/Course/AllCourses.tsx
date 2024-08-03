@@ -66,7 +66,7 @@ const AllCourses = (props: Props) => {
       renderCell: (params: any) => (
         <Button
           onClick={() => {
-         
+
             router.push(`/admin/yearfetch/${params.row.id}`); // Use router.push
             console.log("Course ID for View Year:", params.row.id);
           }}
@@ -106,7 +106,7 @@ const AllCourses = (props: Props) => {
     ? data.courses.map((item: any) => ({
       id: item._id,
       title: item.name,
-      exam:item.tags,
+      exam: item.tags,
       ratings: item.ratings,
       purchased: item.purchased,
       created_at: format(item.createdAt),
@@ -134,7 +134,7 @@ const AllCourses = (props: Props) => {
       setOpenAddYear(false);
       refetch();
       toast.success("Year Added Successfully");
-    
+
     }
     if (yearAddError) {
       if ("data" in yearAddError) {

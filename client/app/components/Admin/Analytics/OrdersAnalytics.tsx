@@ -49,7 +49,7 @@ type Props = {
 };
 
 export default function OrdersAnalytics({ isDashboard }: Props) {
-  const { data, isLoading } = useGetOrdersAnalyticsQuery({});
+  const {data, isLoading } = useGetOrdersAnalyticsQuery({});
 
   const analyticsData: any = [];
 

@@ -1,20 +1,20 @@
 "use client";
 import React from "react";
 import Heading from "../utils/Heading";
-import AdminSidebar from "../components/Admin/Sidebar/AdminSidebar";
-import DashboardHero from "../components/Admin/DashboardHero";
+import AdminSidebar from "../components/Admin/sidebar/AdminSidebar";
 import AdminProtected from "../hooks/adminProtected";
+import DashboardHero from "../components/Admin/DashboardHero";
 
 type Props = {};
 
-function page({}: Props) {
+const page = (props: Props) => {
   return (
     <div>
       <AdminProtected>
         <Heading
           title="SolviT - Admin"
           description="SolviT is a platform for students to learn and get help from teachers"
-          keywords="Wbjee,NEET,Gate,Exam"
+          keywords="Programming,MERN,Redux,Machine Learning"
         />
         <div className="flex min-h-screen">
           <div className="1500px:w-[16%] w-1/5">
@@ -27,6 +27,6 @@ function page({}: Props) {
       </AdminProtected>
     </div>
   );
-}
+};
 
 export default page;

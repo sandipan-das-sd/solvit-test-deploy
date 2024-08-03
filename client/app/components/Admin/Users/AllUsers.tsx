@@ -33,31 +33,6 @@ const AllCourses: FC<Props> = ({ isTeam }) => {
   const [deleteUser, { isSuccess: deleteSuccess, error: deleteError }] =
     useDeleteUserMutation({});
 
-  // useEffect(() => {
-  //   if (updateError) {
-  //     if ("data" in updateError) {
-  //       const errorMessage = updateError as any;
-  //       toast.error(errorMessage.data.message);
-  //     }
-  //   }
-
-  //   if (isSuccess) {
-  //     refetch();
-  //     toast.success("User role updated successfully");
-  //     setActive(false);
-  //   }
-  //   if (deleteSuccess) {
-  //     refetch();
-  //     toast.success("Delete user successfully!");
-  //     setOpen(false);
-  //   }
-  //   if (deleteError) {
-  //     if ("data" in deleteError) {
-  //       const errorMessage = deleteError as any;
-  //       toast.error(errorMessage.data.message);
-  //     }
-  //   }
-  // }, [updateError, isSuccess, deleteSuccess, deleteError]);
   useEffect(() => {
     if (updateError) {
       if ("data" in updateError) {
@@ -82,7 +57,7 @@ const AllCourses: FC<Props> = ({ isTeam }) => {
         toast.error(errorMessage.data.message);
       }
     }
-  }, [updateError, isSuccess, deleteSuccess, deleteError, refetch]);
+  }, [updateError, isSuccess, deleteSuccess, deleteError]);
 
   const columns = [
     { field: "id", headerName: "ID", flex: 0.3 },
@@ -176,9 +151,9 @@ const AllCourses: FC<Props> = ({ isTeam }) => {
       ) : (
         <Box m="20px">
           {isTeam && (
-            <div className="w-full flex">
+            <div className="w-full flex justify-end">
               <div
-                className={`${styles.button} !w-[200px] !rounded-[50px] dark:bg-[#57c7a3] !h-[45px] dark:border dark:border-[#ffffff6c]`}
+                className={`${styles.button} !w-[200px] !rounded-[10px] dark:bg-[#57c7a3] !h-[35px] dark:border dark:border-[#ffffff6c]`}
                 onClick={() => setActive(!active)}
               >
                 Add New Member
@@ -187,7 +162,7 @@ const AllCourses: FC<Props> = ({ isTeam }) => {
           )}
           <Box
             m="40px 0 0 0"
-            height="75vh"
+            height="80vh"
             sx={{
               "& .MuiDataGrid-root": {
                 border: "none",

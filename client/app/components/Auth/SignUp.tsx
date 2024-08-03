@@ -11,7 +11,6 @@ import { FcGoogle } from "react-icons/fc";
 import { styles } from "../../../app/styles/style";
 import { useRegisterMutation } from "@/redux/features/auth/authApi";
 import { toast } from "react-hot-toast";
-import { signIn } from "next-auth/react";
 
 type Props = {
   setRoute: (route: string) => void;
@@ -29,19 +28,6 @@ const Signup: FC<Props> = ({ setRoute }) => {
   const [show, setShow] = useState(false);
   const [register, { data, error, isSuccess }] = useRegisterMutation();
 
-  // useEffect(() => {
-  //   if (isSuccess) {
-  //     const message = data?.message || "Registration successful";
-  //     toast.success(message);
-  //     setRoute("Verification");
-  //   }
-  //   if (error) {
-  //     if ("data" in error) {
-  //       const errorData = error as any;
-  //       toast.error(errorData.data.message);
-  //     }
-  //   }
-  // }, [isSuccess, error]);
   useEffect(() => {
     if (isSuccess) {
       const message = data?.message || "Registration successful";
@@ -54,8 +40,7 @@ const Signup: FC<Props> = ({ setRoute }) => {
         toast.error(errorData.data.message);
       }
     }
-  }, [isSuccess, error, data?.message, setRoute]);
-
+  }, [isSuccess, error]);
 
   const formik = useFormik({
     initialValues: { name: "", email: "", password: "" },
@@ -86,7 +71,7 @@ const Signup: FC<Props> = ({ setRoute }) => {
             value={values.name}
             onChange={handleChange}
             id="name"
-            placeholder="Name..."
+            placeholder="johndoe"
             className={`${errors.name && touched.name && "border-red-500"} ${
               styles.input
             }`}
@@ -129,13 +114,13 @@ const Signup: FC<Props> = ({ setRoute }) => {
           />
           {!show ? (
             <AiOutlineEyeInvisible
-              className="absolute bottom-3 right-2 z-1 cursor-pointer text-black dark:text-white"
+              className="absolute bottom-3 right-2 z-1 cursor-pointer"
               size={20}
               onClick={() => setShow(true)}
             />
           ) : (
             <AiOutlineEye
-              className="absolute bottom-3 right-2 z-1 cursor-pointer text-black dark:text-white"
+              className="absolute bottom-3 right-2 z-1 cursor-pointer"
               size={20}
               onClick={() => setShow(false)}
             />
@@ -152,18 +137,10 @@ const Signup: FC<Props> = ({ setRoute }) => {
           Or join with
         </h5>
         <div className="flex items-center justify-center my-3">
-          <FcGoogle
-            size={30}
-            className="cursor-pointer mr-2"
-            onClick={() => signIn("google")}
-          />
-          <AiFillGithub
-            size={30}
-            className="cursor-pointer ml-2 text-black dark:text-white"
-            onClick={() => signIn("github")}
-          />
+          <FcGoogle size={30} className="cursor-pointer mr-2" />
+          <AiFillGithub size={30} className="cursor-pointer ml-2" />
         </div>
-        <h5 className="text-center pt-4 font-Poppins text-[14px] text-black dark:text-white">
+        <h5 className="text-center pt-4 font-Poppins text-[14px]">
           Already have an account?{" "}
           <span
             className="text-[#2190ff] pl-1 cursor-pointer"
