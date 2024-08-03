@@ -79,7 +79,7 @@ const Footer = (props: Props) => {
             <ul className="space-y-4">
               <li>
                 <Link
-                  href="https://www.youtube.com/channel/UCHz6Sne9splmvm-q2w1_HWQ"
+                  href=""
                   className="text-base text-black dark:text-gray-300 dark:hover:text-white"
                 >
                   Youtube
@@ -87,7 +87,7 @@ const Footer = (props: Props) => {
               </li>
               <li>
                 <Link
-                  href="https://www.instagram.com/shahriar_sajeeb_/"
+                  href=""
                   className="text-base text-black dark:text-gray-300 dark:hover:text-white"
                 >
                   Instagram
@@ -95,10 +95,10 @@ const Footer = (props: Props) => {
               </li>
               <li>
                 <Link
-                  href="https://www.github.com/shahriarsajeeb"
+                  href=""
                   className="text-base text-black dark:text-gray-300 dark:hover:text-white"
                 >
-                  github
+                 Facebook
                 </Link>
               </li>
             </ul>
@@ -108,21 +108,21 @@ const Footer = (props: Props) => {
               Contact Info
             </h3>
             <p className="text-base text-black dark:text-gray-300 dark:hover:text-white pb-2">
-              Call Us: 1-885-665-2022
+              Call Us:91-8335019404
             </p>
 
             <p className="text-base text-black dark:text-gray-300 dark:hover:text-white pb-2">
-              Address: +7011 Vermont Ave, Los Angeles, CA 90044
+              Address: 218 Basudevpur Road, Los Saratpally, Shyamnagar
             </p>
 
             <p className="text-base text-black dark:text-gray-300 dark:hover:text-white  pb-2">
-              Mail Us: hello@solvit.com
+              Mail Us: solvitwbjee@gmail.com
             </p>
           </div>
         </div>
         <br />
         <p className="text-center text-black dark:text-white">
-          Copyright © 2023 SolviT | All Rights Reserved
+          Copyright © 2024 SolviT | All Rights Reserved
         </p>
       </div>
       <br />
