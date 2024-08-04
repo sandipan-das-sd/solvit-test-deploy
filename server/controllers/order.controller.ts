@@ -18,6 +18,8 @@ export const createOrder = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { courseId, payment_info } = req.body as IOrder;
+      console.log(req.body); // Log incoming request body
+
 
       const user = await userModel.findById(req.user?._id);
       if (!user) {

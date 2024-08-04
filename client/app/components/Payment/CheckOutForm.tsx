@@ -48,7 +48,8 @@ const CheckOutForm = ({ data,user,refetch }: Props) => {
   };
 
   useEffect(() => {
-   if(orderData){
+    if (orderData) {
+      console.log(orderData);
     refetch();
     socketId.emit("notification", {
        title: "New Order",
