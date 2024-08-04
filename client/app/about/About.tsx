@@ -9,6 +9,8 @@ const About = () => {
         What is <span className="text-gradient">E-Learning?</span>
       </h1>
 
+      
+      
       <br />
       <div className="w-[95%] 800px:w-[85%] m-auto">
         <p className="text-[18px] font-Poppins">
