@@ -88,7 +88,6 @@
 
 // export default CheckOutForm;
 import { styles } from "@/app/styles/style";
-import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
 import { useCreateOrderMutation } from "@/redux/features/orders/ordersApi";
 import {
   LinkAuthenticationElement,
@@ -96,7 +95,7 @@ import {
   useElements,
   useStripe,
 } from "@stripe/react-stripe-js";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import socketIO from "socket.io-client";
@@ -115,8 +114,9 @@ const CheckOutForm = ({ data, user, refetch }: Props) => {
   const stripe = useStripe();
   const elements = useElements();
   const [message, setMessage] = useState<any>("");
-  const [createOrder, { data: orderData, error }] = useCreateOrderMutation();
+  const [createOrder, { error }] = useCreateOrderMutation();
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter(); // Using useRouter for navigation
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -124,15 +124,18 @@ const CheckOutForm = ({ data, user, refetch }: Props) => {
       return;
     }
     setIsLoading(true);
-    const { error, paymentIntent } = await stripe.confirmPayment({
+    const { error: paymentError, paymentIntent } = await stripe.confirmPayment({
       elements,
       redirect: "if_required",
     });
 
-    if (error) {
-      setMessage(error.message);
+    if (paymentError) {
+      setMessage(paymentError.message);
       setIsLoading(false);
-    } else if (paymentIntent && paymentIntent.status === "succeeded") {
+      return;
+    }
+
+    if (paymentIntent && paymentIntent.status === "succeeded") {
       try {
         await createOrder({
           courseId: data._id,
@@ -149,7 +152,7 @@ const CheckOutForm = ({ data, user, refetch }: Props) => {
         });
 
         // Redirect to course access page
-        redirect(`/course-access/${data._id}`);
+        router.push(`/course-access/${data._id}`); // Using useRouter for navigation
       } catch (createOrderError) {
         setIsLoading(false);
         console.error("Failed to create order:", createOrderError);
@@ -163,6 +166,8 @@ const CheckOutForm = ({ data, user, refetch }: Props) => {
       if ("data" in error) {
         const errorMessage = error as any;
         toast.error(errorMessage.data.message);
+      } else {
+        toast.error("An unexpected error occurred. Please try again.");
       }
     }
   }, [error]);
