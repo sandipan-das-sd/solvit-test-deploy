@@ -152,6 +152,7 @@ const CheckOutForm = ({ data, user, refetch }: Props) => {
         });
 
         // Redirect to course access page
+        alert("Ordered created succes")
         router.push(`/course-access/${data._id}`); // Using useRouter for navigation
       } catch (createOrderError) {
         setIsLoading(false);
