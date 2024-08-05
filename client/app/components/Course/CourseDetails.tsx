@@ -247,7 +247,10 @@ const CourseDetails = ({
               </div>
               <br />
               <p className="pb-1 text-black dark:text-white">
-                • Source code included
+                • Dedicately  Past 10 Years Video Solutions of WBJEE from Expert teachers
+              </p>
+              <p className="pb-3 800px:pb-1 text-black dark:text-white">
+                • Dedicately  Past 10 Years Text Solutions of WBJEE from Expert teachers
               </p>
               <p className="pb-1 text-black dark:text-white">
                 • Full lifetime access
@@ -255,8 +258,15 @@ const CourseDetails = ({
               <p className="pb-1 text-black dark:text-white">
                 • Certificate of completion
               </p>
+              
               <p className="pb-3 800px:pb-1 text-black dark:text-white">
-                • Premium Support
+                • Doubt Clearing Classes
+              </p>
+              <p className="pb-3 800px:pb-1 text-black dark:text-white">
+                • Mock test
+              </p>
+              <p className="pb-3 800px:pb-1 text-black dark:text-white">
+                • live Support
               </p>
             </div>
           </div>
