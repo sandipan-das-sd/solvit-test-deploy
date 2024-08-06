@@ -10,6 +10,7 @@ import sendMail from "../utils/sendMail";
 import NotificationModel from "../models/notification.Model";
 import { getAllOrdersService, newOrder } from "../services/order.service";
 import { redis } from "../utils/redis";
+import { json } from "stream/consumers";
 require("dotenv").config();
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
@@ -103,12 +104,122 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 //   }
 // );
 
+// export const createOrder = CatchAsyncError(
+//   async (req: Request, res: Response, next: NextFunction) => {
+//     try {
+//       const { courseId, payment_info } = req.body as IOrder;
+
+//       // Check if req.user is properly populated
+//       if (!req.user) {
+//         return next(new ErrorHandler("User not authenticated", 401));
+//       }
+
+//       const user = await userModel.findById(req.user._id);
+//       if (!user) {
+//         return next(new ErrorHandler("User not found", 404));
+//       }
+
+//       // Check if courseId is valid and find the course
+//       const course: ICourse | null = await CourseModel.findById(courseId);
+//       if (!course) {
+//         return next(new ErrorHandler("Course not found", 404));
+//       }
+
+//       // Debugging output
+//       console.log("Course ID:", course._id.toString());
+//       console.log("User ID:", user._id.toString());
+
+//       // Ensure payment_info is not undefined
+//       if (!payment_info) {
+//         return next(new ErrorHandler("Payment info is missing", 400));
+//       }
+
+//       const data: any = {
+//         courseId: course._id.toString(),
+//         userId: user._id.toString(),
+//         payment_info,
+//       };
+
+//       const mailData = {
+//         order: {
+//           _id: course._id.toString().slice(0, 6),
+//           name: course.name,
+//           tag: course.tags,
+//           price: course.price,
+//           date: new Date().toLocaleDateString("en-US", {
+//             year: "numeric",
+//             month: "long",
+//             day: "numeric",
+//           }),
+//         },
+
+//       };
+
+
+
+
+
+
+
+//       const html = await ejs.renderFile(
+//         path.join(__dirname, "../mails/order-confirmation.ejs"),
+//         { order: mailData }
+//       );
+
+//       try {
+//         if (user) {
+//           await sendMail({
+//             email: user.email,
+//             subject: "Order Confirmation",
+//             template: "order-confirmation.ejs",
+//             data: mailData,
+//           });
+//         }
+//       } catch (error: any) {
+//         return next(new ErrorHandler(error.message, 500));
+//       }
+
+//       user.courses.push({ courseId: course._id.toString() });
+
+//       const userId = req.user._id?.toString();
+//       if (userId) {
+//         await redis.set(userId, JSON.stringify(user));
+//       } else {
+//         return next(new ErrorHandler("User ID is missing", 400));
+//       }
+
+//       await user.save();
+
+//       await NotificationModel.create({
+//         user: user._id,
+//         title: "New Order",
+//         message: `You have a new order from ${course.name}`,
+//       });
+
+//       course.purchased += 1;
+//       await course.save();
+
+//       newOrder(data, res, next);
+//     } catch (error: any) {
+//       return next(new ErrorHandler(error.message, 500));
+//     }
+//   }
+// );
+
 export const createOrder = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { courseId, payment_info } = req.body as IOrder;
 
-      // Check if req.user is properly populated
+      if (payment_info && "id" in payment_info) {
+        const paymentIntentId = payment_info.id;
+        const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+
+        if (paymentIntent.status !== "succeeded") {
+          return next(new ErrorHandler("Payment not authorized", 400));
+        }
+      }
+
       if (!req.user) {
         return next(new ErrorHandler("User not authenticated", 401));
       }
@@ -118,17 +229,11 @@ export const createOrder = CatchAsyncError(
         return next(new ErrorHandler("User not found", 404));
       }
 
-      // Check if courseId is valid and find the course
       const course: ICourse | null = await CourseModel.findById(courseId);
       if (!course) {
         return next(new ErrorHandler("Course not found", 404));
       }
 
-      // Debugging output
-      console.log("Course ID:", course._id.toString());
-      console.log("User ID:", user._id.toString());
-
-      // Ensure payment_info is not undefined
       if (!payment_info) {
         return next(new ErrorHandler("Payment info is missing", 400));
       }
@@ -151,14 +256,7 @@ export const createOrder = CatchAsyncError(
             day: "numeric",
           }),
         },
-
       };
-
-
-
-
-
-
 
       const html = await ejs.renderFile(
         path.join(__dirname, "../mails/order-confirmation.ejs"),
@@ -179,7 +277,7 @@ export const createOrder = CatchAsyncError(
       }
 
       user.courses.push({ courseId: course._id.toString() });
-
+      await redis.set(req.user?._id, JSON.stringify(user))
       const userId = req.user._id?.toString();
       if (userId) {
         await redis.set(userId, JSON.stringify(user));
@@ -204,7 +302,6 @@ export const createOrder = CatchAsyncError(
     }
   }
 );
-
 
 // get All orders --- only for admin
 export const getAllOrders = CatchAsyncError(
