@@ -10,19 +10,16 @@ import sendMail from "../utils/sendMail";
 import NotificationModel from "../models/notification.Model";
 import { getAllOrdersService, newOrder } from "../services/order.service";
 import { redis } from "../utils/redis";
-import { json } from "stream/consumers";
 require("dotenv").config();
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 // create order
-
-
 export const createOrder = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { courseId, payment_info } = req.body as IOrder;
 
-      if (payment_info && "id" in payment_info) {
+      if (payment_info && 'id' in payment_info) {
         const paymentIntentId = payment_info.id;
         const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
 
@@ -31,22 +28,22 @@ export const createOrder = CatchAsyncError(
         }
       }
 
-      if (!req.user) {
-        return next(new ErrorHandler("User not authenticated", 401));
-      }
-
-      const user = await userModel.findById(req.user._id);
+      const user = await userModel.findById(req.user?._id);
       if (!user) {
         return next(new ErrorHandler("User not found", 404));
+      }
+
+      const courseExistInUser = user.courses.some(
+        (course: any) => course.courseId.toString() === courseId
+      );
+
+      if (courseExistInUser) {
+        return next(new ErrorHandler("You have already purchased this course", 400));
       }
 
       const course: ICourse | null = await CourseModel.findById(courseId);
       if (!course) {
         return next(new ErrorHandler("Course not found", 404));
-      }
-
-      if (!payment_info) {
-        return next(new ErrorHandler("Payment info is missing", 400));
       }
 
       const data: any = {
@@ -59,7 +56,6 @@ export const createOrder = CatchAsyncError(
         order: {
           _id: course._id.toString().slice(0, 6),
           name: course.name,
-          tag: course.tags,
           price: course.price,
           date: new Date().toLocaleDateString("en-US", {
             year: "numeric",
@@ -88,20 +84,21 @@ export const createOrder = CatchAsyncError(
       }
 
       user.courses.push({ courseId: course._id.toString() });
-      await redis.set(req.user?._id, JSON.stringify(user))
-      const userId = req.user._id?.toString();
+
+      await user.save();
+
+      await redis.set(req.user?.id, JSON.stringify(user));
+      const userId = req.user?._id?.toString();
       if (userId) {
         await redis.set(userId, JSON.stringify(user));
       } else {
         return next(new ErrorHandler("User ID is missing", 400));
       }
 
-      await user.save();
-
       await NotificationModel.create({
         user: user._id,
         title: "New Order",
-        message: `You have a new order from ${course.name}`,
+        message: `You have a new order for ${course.name}`,
       });
 
       course.purchased += 1;
@@ -125,7 +122,7 @@ export const getAllOrders = CatchAsyncError(
   }
 );
 
-//  send stripe publishble key
+// send stripe publishable key
 export const sendStripePublishableKey = CatchAsyncError(
   async (req: Request, res: Response) => {
     res.status(200).json({
@@ -148,20 +145,11 @@ export const newPayment = CatchAsyncError(
         automatic_payment_methods: {
           enabled: true,
         },
-        shipping: {
-          name: "Harmik Lathiya",
-          address: {
-            line1: "218,Basudevpur Road Saratpally Shyamnagar",
-            postal_code: "743127",
-            city: "Kolkata",
-            state: "WB",
-            country: "INDIA",
-          },
-        },
       });
       res.status(201).json({
         success: true,
         client_secret: myPayment.client_secret,
+        myPayment: myPayment,
       });
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 500));
