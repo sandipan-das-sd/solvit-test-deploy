@@ -21,7 +21,6 @@
     "@types/react": "18.2.19",
     "@types/react-dom": "18.2.7",
     "@types/react-modal": "^3.16.3",
-    "autoprefixer": "10.4.14",
     "axios": "^1.4.0",
     "bufferutil": "^4.0.7",
     "dotenv": "^16.4.5",
@@ -50,5 +49,8 @@
     "utf-8-validate": "^6.0.3",
     "ws": "^8.13.0",
     "yup": "^1.2.0"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.20"
   }
 }
