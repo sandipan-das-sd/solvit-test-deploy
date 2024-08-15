@@ -142,6 +142,58 @@ export const activateUser = CatchAsyncError(
   }
 );
 
+
+//Resend OTP
+
+
+export const resendOtp = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { email } = req.body;
+
+      // Check if the user exists
+      const user = await userModel.findOne({ email });
+      if (!user) {
+        return next(new ErrorHandler("User not found", 404));
+      }
+
+      // Create a new activation token
+      const activationToken = createActivationToken({
+        name: user.name,
+        email: user.email,
+        password: user.password,
+      });
+
+      const activationCode = activationToken.activationCode;
+
+      // Send the new activation email
+      const data = { user: { name: user.name }, activationCode };
+      const html = await ejs.renderFile(
+        path.join(__dirname, "../mails/activation-mail.ejs"),
+        data
+      );
+
+      try {
+        await sendMail({
+          email: user.email,
+          subject: "Resend OTP for Activate your account",
+          template: "activation-mail.ejs",
+          data,
+        });
+
+        res.status(200).json({
+          success: true,
+          message: `A new activation email has been sent to ${user.email}. Please check your email to activate your account.`,
+          activationToken: activationToken.token,
+        });
+      } catch (error: any) {
+        return next(new ErrorHandler(error.message, 400));
+      }
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
+    }
+  }
+);
 // Login user
 interface ILoginRequest {
   email: string;

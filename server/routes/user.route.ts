@@ -13,6 +13,7 @@ import {
   updateProfilePicture,
   updateUserInfo,
   updateUserRole,
+  resendOtp
 } from "../controllers/user.controller";
 import { authorizeRoles, isAutheticated } from "../middleware/auth";
 const userRouter = express.Router();
@@ -20,6 +21,8 @@ const userRouter = express.Router();
 userRouter.post("/registration", registrationUser);
 
 userRouter.post("/activate-user", activateUser);
+//Resend OTP for activate Account
+userRouter.post('/resend-otp', resendOtp)
 
 userRouter.post("/login", loginUser);
 
