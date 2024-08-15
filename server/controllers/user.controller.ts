@@ -66,6 +66,7 @@ export const registrationUser = CatchAsyncError(
           success: true,
           message: `Please check your email: ${user.email} to activate your account!`,
           activationToken: activationToken.token,
+          email: user.email, 
         });
       } catch (error: any) {
         return next(new ErrorHandler(error.message, 400));
@@ -185,6 +186,7 @@ export const resendOtp = CatchAsyncError(
           success: true,
           message: `A new activation email has been sent to ${user.email}. Please check your email to activate your account.`,
           activationToken: activationToken.token,
+          email: user.email,
         });
       } catch (error: any) {
         return next(new ErrorHandler(error.message, 400));
