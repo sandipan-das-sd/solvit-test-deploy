@@ -5,7 +5,7 @@ import {
   getAllOrders,
   newPayment,
   sendStripePublishableKey,
-  razorpayWebhook
+
 } from "../controllers/order.controller";
 const orderRouter = express.Router();
 
@@ -21,6 +21,6 @@ orderRouter.get(
 orderRouter.get("/payment/stripepublishablekey", sendStripePublishableKey);
 
 orderRouter.post("/payment", isAutheticated, newPayment);
-orderRouter.post('/new-payment', isAutheticated, razorpayWebhook)
+
 
 export default orderRouter;
