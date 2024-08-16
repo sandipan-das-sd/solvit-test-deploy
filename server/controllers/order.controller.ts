@@ -156,3 +156,84 @@ export const newPayment = CatchAsyncError(
     }
   }
 );
+
+
+export const razorpayWebhook = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const secret = process.env.RAZORPAY_WEBHOOK_SECRET;
+
+    const shasum = crypto.createHmac('sha256', secret as string);
+    shasum.update(JSON.stringify(req.body));
+    const digest = shasum.digest('hex');
+
+    if (digest !== req.headers['x-razorpay-signature']) {
+      return next(new ErrorHandler('Invalid webhook signature', 400));
+    }
+
+    const event = req.body.event;
+    const payload = req.body.payload;
+
+    if (event === 'payment.captured') {
+      const paymentEntity = payload.payment.entity;
+      const paymentId = paymentEntity.id;
+
+      // Fetch the order associated with the payment
+      const order = await razorpay.orders.fetch(paymentEntity.order_id);
+      if (!order) {
+        return next(new ErrorHandler('Order not found', 404));
+      }
+
+      const user = await userModel.findOne({ 'payment_info.payment_id': paymentId });
+      if (!user) {
+        return next(new ErrorHandler('User not found', 404));
+      }
+
+      // Mark course as purchased
+      const course = await CourseModel.findById(order.notes.courseId);
+      if (!course) {
+        return next(new ErrorHandler('Course not found', 404));
+      }
+
+      user.courses.push({ courseId: course._id.toString() });
+      await user.save();
+
+      await NotificationModel.create({
+        user: user._id,
+        title: 'Payment Success',
+        message: `Your payment for ${course.name} was successful.`,
+      });
+
+      const mailData = {
+        order: {
+          _id: course._id.toString().slice(0, 6),
+          name: course.name,
+          price: course.price,
+          date: new Date().toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          }),
+        },
+      };
+
+      const html = await ejs.renderFile(
+        path.join(__dirname, '../mails/order-confirmation.ejs'),
+        { order: mailData }
+      );
+
+      try {
+        await sendMail({
+          email: user.email,
+          subject: 'Order Confirmation',
+          template: 'order-confirmation.ejs',
+          data: mailData,
+        });
+      } catch (error: any) {
+        console.error('Error sending email:', error);
+        return next(new ErrorHandler(`Failed to send email: ${error.message}`, 500));
+      }
+    }
+
+    res.status(200).json({ success: true });
+  }
+);
