@@ -126,7 +126,8 @@ const Policy = (props: Props) => {
             The PYQ platform being the sole owner and proprietor of the contents shall have the absolute right to remove or delete videos of educators if the content is not relevant or good.
           </p>
           <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
-            The Educators shall be bound to share their original videos; they cannot copy content from other websites, for example, using content from platforms like "XYZ Learning/Academy/Platform or any app."
+            The Educators shall be bound to share their original videos; they cannot copy content from other websites, for example, using content from platforms like &quot;XYZ Learning/Academy/Platform or any app.&quot;
+
           </p>
           <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
             That the Educators cannot use any rough language/abusive language/behaviour dressing sense or engage in inappropriate behaviour with the users/ students while clearing doubts.
