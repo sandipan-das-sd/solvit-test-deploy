@@ -651,7 +651,7 @@ export const forgetPassword = CatchAsyncError(
     const mailOptions = {
       from: process.env.SMTP_MAIL,
       to: email,
-      subject: "Reset Your Password From Employee Management System",
+      subject: "Reset Your Password From SolVit The LMS",
       text: `Click the Link\n${link}`,
     };
 
