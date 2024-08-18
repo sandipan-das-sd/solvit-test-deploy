@@ -638,8 +638,8 @@ export const forgetPassword = CatchAsyncError(
       expiresIn: "1h",
     });
 
-    // const link = `${process.env.BACKEND_URL}/api/v1/reset-password/${oldUser._id}/${token}`;
-    const link = `http://localhost:8000/api/v1/reset-password/${oldUser._id}/${token}`;
+    const link = `${process.env.BACKEND_URL}/api/v1/reset-password/${oldUser._id}/${token}`;
+    // const link = `http://localhost:8000/api/v1/reset-password/${oldUser._id}/${token}`;
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
