@@ -1,4 +1,7 @@
 require("dotenv").config();
+import crypto from 'crypto';
+import bcrypt from 'bcryptjs';
+import nodemailer from "nodemailer";
 import { Request, Response, NextFunction } from "express";
 import userModel, { IUser } from "../models/user.model";
 import ErrorHandler from "../utils/ErrorHandler";
@@ -143,6 +146,39 @@ export const activateUser = CatchAsyncError(
   }
 );
 
+// Login user
+interface ILoginRequest {
+  email: string;
+  password: string;
+}
+
+export const loginUser = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { email, password } = req.body as ILoginRequest;
+
+      if (!email || !password) {
+        return next(new ErrorHandler("Please enter email and password", 400));
+      }
+
+      const user = await userModel.findOne({ email }).select("+password");
+
+      if (!user) {
+        return next(new ErrorHandler("Invalid email or password", 400));
+      }
+
+      const isPasswordMatch = await user.comparePassword(password);
+      if (!isPasswordMatch) {
+        return next(new ErrorHandler("Invalid email or password", 400));
+      }
+
+      sendToken(user, 200, res);
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
+    }
+  }
+);
+
 
 //Resend OTP
 
@@ -186,7 +222,7 @@ export const resendOtp = CatchAsyncError(
           success: true,
           message: `A new activation email has been sent to ${user.email}. Please check your email to activate your account.`,
           activationToken: activationToken.token,
-          email: user.email,
+          email: user.email, 
         });
       } catch (error: any) {
         return next(new ErrorHandler(error.message, 400));
@@ -196,39 +232,6 @@ export const resendOtp = CatchAsyncError(
     }
   }
 );
-// Login user
-interface ILoginRequest {
-  email: string;
-  password: string;
-}
-
-export const loginUser = CatchAsyncError(
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { email, password } = req.body as ILoginRequest;
-
-      if (!email || !password) {
-        return next(new ErrorHandler("Please enter email and password", 400));
-      }
-
-      const user = await userModel.findOne({ email }).select("+password");
-
-      if (!user) {
-        return next(new ErrorHandler("Invalid email or password", 400));
-      }
-
-      const isPasswordMatch = await user.comparePassword(password);
-      if (!isPasswordMatch) {
-        return next(new ErrorHandler("Invalid email or password", 400));
-      }
-
-      sendToken(user, 200, res);
-    } catch (error: any) {
-      return next(new ErrorHandler(error.message, 400));
-    }
-  }
-);
-
 // logout user
 export const logoutUser = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -283,18 +286,21 @@ export const updateAccessToken = CatchAsyncError(
         }
       );
 
-      const refreshToken = jwt.sign(
-        { id: user._id },
-        process.env.REFRESH_TOKEN as string,
-        {
-          expiresIn: "3d",
-        }
-      );
+      // const refreshToken = jwt.sign(
+      //   { id: user._id },
+      //   process.env.REFRESH_TOKEN as string,
+      //   {
+      //     expiresIn: "3d",
+      //   }
+      // );
 
       req.user = user;
 
-      res.cookie("access_token", accessToken, accessTokenOptions);
-      res.cookie("refresh_token", refreshToken, refreshTokenOptions);
+      // res.cookie("access_token", accessToken, accessTokenOptions);
+      // res.cookie("refresh_token", refreshToken, refreshTokenOptions);
+      res.cookie("access_token", accessToken, { httpOnly: true, sameSite: 'lax' });
+      // res.cookie("refresh_token", refreshToken, { httpOnly: true, sameSite: 'lax' });
+
 
       await redis.set(user._id, JSON.stringify(user), "EX", 604800); // 7days
       res.status(200).json({
@@ -309,71 +315,6 @@ export const updateAccessToken = CatchAsyncError(
   }
 );
 
-
-//modified code for error in  refresh token
-// export const updateAccessToken = CatchAsyncError(
-//   async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//       const refresh_token = req.cookies.refresh_token as string;
-//       const decoded = jwt.verify(
-//         refresh_token,
-//         process.env.REFRESH_TOKEN as string
-//       ) as JwtPayload;
-
-//       const message = "Could not refresh token";
-//       if (!decoded) {
-//         return next(new ErrorHandler(message, 400));
-//       }
-
-//       const session = await redis.get(decoded.id as string);
-
-//       if (!session) {
-//         return next(
-//           new ErrorHandler("Please login for access this resources!", 400)
-//         );
-//       }
-
-//       const user = JSON.parse(session);
-
-//       const accessToken = jwt.sign(
-//         { id: user._id },
-//         process.env.ACCESS_TOKEN as string,
-//         {
-//           expiresIn: "5m",
-//         }
-//       );
-
-//       const refreshToken = jwt.sign(
-//         { id: user._id },
-//         process.env.REFRESH_TOKEN as string,
-//         {
-//           expiresIn: "3d",
-//         }
-//       );
-
-//       req.user = user;
-
-//       // Set cookies for the new tokens
-//       res.cookie("access_token", accessToken, accessTokenOptions);
-//       res.cookie("refresh_token", refreshToken, refreshTokenOptions);
-
-//       // Fixed the missing comma and closing parenthesis
-//       await redis.set(user._id, JSON.stringify(user));
-
-//       // Send the response
-//       res.status(200).json({
-//         status: "Success",
-//         accessToken,
-//       });
-
-//       // Return after sending response to prevent further execution
-//       return;
-//     } catch (error: any) {
-//       // Send error response and return
-//       return next(new ErrorHandler(error.message, 400));
-//     }
-//   }
-// );
 
 
 // get user info
@@ -633,5 +574,93 @@ export const deleteUser = CatchAsyncError(
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 400));
     }
+  }
+);
+
+// Reset Password - GET
+export const getResetPassword = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id, token } = req.params;
+    const oldUser: IUser | null = await userModel.findById(id);
+
+    if (!oldUser) {
+      return next(new ErrorHandler("User Not Exists", 404));
+    }
+
+    const verify = jwt.verify(token, process.env.ACTIVATION_SECRET as string) as { email: string };
+
+    res.render("reset-password-mail", {
+      userName: oldUser.name,
+      email: verify.email,
+      status: "Not Verified",
+    });
+  }
+);
+
+// Reset Password - POST
+export const postResetPassword = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id, token } = req.params;
+    const { password } = req.body;
+
+    const oldUser: IUser | null = await userModel.findById(id);
+
+    if (!oldUser) {
+      return next(new ErrorHandler("User Not Exists", 404));
+    }
+
+    jwt.verify(token, process.env.ACTIVATION_SECRET as string);
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    await userModel.updateOne({ _id: id }, { $set: { password: hashedPassword } });
+
+    res.render("reset-password-mail", {
+      userName: oldUser.name,
+      email: oldUser.email,
+      status: "Verified",
+    });
+  }
+);
+
+//forget -password
+export const forgetPassword = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { email } = req.body;
+    const oldUser: IUser | null = await userModel.findOne({ email });
+
+    if (!oldUser) {
+      return next(new ErrorHandler("User Not Exists", 404));
+    }
+
+    const token = jwt.sign({ data: oldUser._id }, process.env.ACTIVATION_SECRET as string, {
+      expiresIn: "1h",
+    });
+
+    // const link = `${process.env.BACKEND_URL}/api/v1/reset-password/${oldUser._id}/${token}`;
+    const link = `http://localhost:8000/api/v1/reset-password/${oldUser._id}/${token}`;
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.SMTP_MAIL,
+        pass: process.env.SMTP_PASSWORD,
+      },
+    });
+
+    const mailOptions = {
+      from: process.env.SMTP_MAIL,
+      to: email,
+      subject: "Reset Your Password From Employee Management System",
+      text: `Click the Link\n${link}`,
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        return next(new ErrorHandler(error.message, 500));
+      } else {
+        res.json({ msg: "Email sent: " + info.response });
+      }
+    });
   }
 );
