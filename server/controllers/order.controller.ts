@@ -1,168 +1,3 @@
-// import { NextFunction, Request, Response } from "express";
-// import { CatchAsyncError } from "../middleware/catchAsyncErrors";
-// import ErrorHandler from "../utils/ErrorHandler";
-// import { IOrder } from "../models/order.Model";
-// import userModel from "../models/user.model";
-// import CourseModel, { ICourse } from "../models/course.model";
-// import path from "path";
-// import ejs from "ejs";
-// import sendMail from "../utils/sendMail";
-// import NotificationModel from "../models/notification.Model";
-// import { getAllOrdersService, newOrder } from "../services/order.service";
-// import { redis } from "../utils/redis";
-// require("dotenv").config();
-// const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
-
-
-// // create order
-// export const createOrder = CatchAsyncError(
-//   async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//       const { courseId, payment_info } = req.body as IOrder;
-
-//       if (payment_info && 'id' in payment_info) {
-//         const paymentIntentId = payment_info.id;
-//         const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
-
-//         if (paymentIntent.status !== "succeeded") {
-//           return next(new ErrorHandler("Payment not authorized", 400));
-//         }
-//       }
-
-//       const user = await userModel.findById(req.user?._id);
-//       if (!user) {
-//         return next(new ErrorHandler("User not found", 404));
-//       }
-
-//       const courseExistInUser = user.courses.some(
-//         (course: any) => course.courseId.toString() === courseId
-//       );
-
-//       if (courseExistInUser) {
-//         return next(new ErrorHandler("You have already purchased this course", 400));
-//       }
-
-//       const course: ICourse | null = await CourseModel.findById(courseId);
-//       if (!course) {
-//         return next(new ErrorHandler("Course not found", 404));
-//       }
-
-//       const data: any = {
-//         courseId: course._id.toString(),
-//         userId: user._id.toString(),
-//         payment_info,
-//       };
-
-//       const mailData = {
-//         order: {
-//           _id: course._id.toString().slice(0, 6),
-//           name: course.name,
-//           price: course.price,
-//           date: new Date().toLocaleDateString("en-US", {
-//             year: "numeric",
-//             month: "long",
-//             day: "numeric",
-//           }),
-//         },
-//       };
-
-//       const html = await ejs.renderFile(
-//         path.join(__dirname, "../mails/order-confirmation.ejs"),
-//         { order: mailData }
-//       );
-
-//       try {
-//         if (user) {
-//           await sendMail({
-//             email: user.email,
-//             subject: "Order Confirmation",
-//             template: "order-confirmation.ejs",
-//             data: mailData,
-//           });
-//         }
-//       } catch (error: any) {
-//         return next(new ErrorHandler(error.message, 500));
-//       }
-
-//       user.courses.push({ courseId: course._id.toString() });
-
-//       await user.save();
-
-//       await redis.set(req.user?.id, JSON.stringify(user));
-//       const userId = req.user?._id?.toString();
-//       if (userId) {
-//         await redis.set(userId, JSON.stringify(user));
-//       } else {
-//         return next(new ErrorHandler("User ID is missing", 400));
-//       }
-
-//       await NotificationModel.create({
-//         user: user._id,
-//         title: "New Order",
-//         message: `You have a new order for ${course.name}`,
-//       });
-
-//       course.purchased += 1;
-//       await course.save();
-
-//       newOrder(data, res, next);
-//     } catch (error: any) {
-//       return next(new ErrorHandler(error.message, 500));
-//     }
-//   }
-// );
-
-// // get All orders --- only for admin
-// export const getAllOrders = CatchAsyncError(
-//   async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//       getAllOrdersService(res);
-//     } catch (error: any) {
-//       return next(new ErrorHandler(error.message, 500));
-//     }
-//   }
-// );
-
-// // send stripe publishable key
-// export const sendStripePublishableKey = CatchAsyncError(
-//   async (req: Request, res: Response) => {
-//     res.status(200).json({
-//       publishablekey: process.env.STRIPE_PUBLISHABLE_KEY,
-//     });
-//   }
-// );
-
-// // new payment
-// export const newPayment = CatchAsyncError(
-//   async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//       const myPayment = await stripe.paymentIntents.create({
-//         amount: req.body.amount,
-//         currency: "INR",
-//         description: "SolviT course services",
-//         metadata: {
-//           company: "SolviT",
-//         },
-//         automatic_payment_methods: {
-//           enabled: true,
-//         },
-//       });
-//       res.status(201).json({
-//         success: true,
-//         client_secret: myPayment.client_secret,
-//         myPayment: myPayment,
-//       });
-//     } catch (error: any) {
-//       return next(new ErrorHandler(error.message, 500));
-//     }
-//   }
-// );
-
-
-
-
-//razorpay code
-
 import { NextFunction, Request, Response } from "express";
 import { CatchAsyncError } from "../middleware/catchAsyncErrors";
 import ErrorHandler from "../utils/ErrorHandler";
@@ -183,204 +18,66 @@ const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID as string,
   key_secret: process.env.RAZORPAY_KEY_SECRET as string,
 });
-// create order
+
+
+
+
 // export const createOrder = CatchAsyncError(
 //   async (req: Request, res: Response, next: NextFunction) => {
 //     try {
-//       const { courseId, payment_info } = req.body as IOrder;
-
-//       const payment = await razorpay.payments.fetch(payment_info.payment_id as any);
-
-//             // Check if the payment status is captured
-//             if (payment.status !== "captured") {
-//               return next(new ErrorHandler("Payment not authorized", 400));
-//             }
-
-//       const user = await userModel.findById(req.user?._id);
-//       if (!user) {
-//         return next(new ErrorHandler("User not found", 404));
+//       if (!req.body || !req.body.amount) {
+//         return res.status(400).send("Bad Request: Missing amount");
 //       }
 
-//       const courseExistInUser = user.courses.some(
-//         (course: any) => course.courseId.toString() === courseId
-//       );
-
-//       if (courseExistInUser) {
-//         return next(new ErrorHandler("You have already purchased this course", 400));
-//       }
-
-//       const course: ICourse | null = await CourseModel.findById(courseId);
-//       if (!course) {
-//         return next(new ErrorHandler("Course not found", 404));
-//       }
-
-//       const data: any = {
-//         courseId: course._id.toString(),
-//         userId: user._id.toString(),
-//         payment_info,
+//       const options = {
+//         amount: req.body.amount, // Amount in paise
+//         currency: 'INR',
+//         receipt: 'Receipt no. 1', // Unique receipt number
+//         payment_capture: 1 // Automatically capture payment
 //       };
 
-//       const mailData = {
-//         order: {
-//           _id: course._id.toString().slice(0, 6),
-//           name: course.name,
-//           price: course.price,
-//           date: new Date().toLocaleDateString("en-US", {
-//             year: "numeric",
-//             month: "long",
-//             day: "numeric",
-//           }),
-//         },
-//       };
+//       const order = await razorpay.orders.create(options);
 
-//       const html = await ejs.renderFile(
-//         path.join(__dirname, "../mails/order-confirmation.ejs"),
-//         { order: mailData }
-//       );
-
-//       try {
-//         if (user) {
-//           await sendMail({
-//             email: user.email,
-//             subject: "Order Confirmation",
-//             template: "order-confirmation.ejs",
-//             data: mailData,
-//           });
-//         }
-//       } catch (error: any) {
-//         return next(new ErrorHandler(error.message, 500));
+//       if (!order || order.status !== 'created') {
+//         console.log('Error creating order:', order);
+//         return res.status(400).send("Failed to create order");
 //       }
 
-//       user.courses.push({ courseId: course._id.toString() });
+//       res.json(order);
 
-//       await user.save();
-
-//       await redis.set(req.user?.id, JSON.stringify(user));
-//       const userId = req.user?._id?.toString();
-//       if (userId) {
-//         await redis.set(userId, JSON.stringify(user));
-//       } else {
-//         return next(new ErrorHandler("User ID is missing", 400));
-//       }
-
-//       await NotificationModel.create({
-//         user: user._id,
-//         title: "New Order",
-//         message: `You have a new order for ${course.name}`,
-//       });
-
-//       course.purchased += 1;
-//       await course.save();
-
-//       newOrder(data, res, next);
-//     } catch (error: any) {
-//       return next(new ErrorHandler(error.message, 500));
+//     } catch (error) {
+//       console.log('Error in createOrder:', error);
+//       res.status(500).send("Internal Server Error");
 //     }
 //   }
 // );
-
+// Updated createOrder function with better error handling
 export const createOrder = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { courseId, payment_info } = req.body as IOrder;
-
-      const paymentId = payment_info.payment_id;
-
-      if (!paymentId) {
-        return next(new ErrorHandler("Payment ID is missing", 400));
+      if (!req.body || !req.body.amount) {
+        return res.status(400).send("Bad Request: Missing amount");
       }
 
-      const payment = await razorpay.payments.fetch(paymentId);
-
-      // Check if the payment status is captured
-      if (payment.status !== "captured") {
-        return next(new ErrorHandler("Payment not authorized", 400));
-      }
-
-      const user = await userModel.findById(req.user?._id);
-      if (!user) {
-        return next(new ErrorHandler("User not found", 404));
-      }
-
-      const courseExistInUser = user.courses.some(
-        (course: any) => course.courseId.toString() === courseId
-      );
-
-      if (courseExistInUser) {
-        return next(new ErrorHandler("You have already purchased this course", 400));
-      }
-
-      const course: ICourse | null = await CourseModel.findById(courseId);
-      if (!course) {
-        return next(new ErrorHandler("Course not found", 404));
-      }
-
-      const data: any = {
-        courseId: course._id.toString(),
-        userId: user._id.toString(),
-        payment_info,
+      const options = {
+        amount: req.body.amount, // Amount in paise
+        currency: 'INR',
+        receipt: 'Receipt no. 1', // Unique receipt number
+        payment_capture: 1 // Automatically capture payment
       };
 
-      const mailData = {
-        order: {
-          _id: course._id.toString().slice(0, 6),
-          name: course.name,
-          price: course.price,
-          date: new Date().toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          }),
-        },
-      };
+      const order = await razorpay.orders.create(options);
 
-      const html = await ejs.renderFile(
-        path.join(__dirname, "../mails/order-confirmation.ejs"),
-        { order: mailData }
-      );
-
-      // Sending email
-      try {
-        await sendMail({
-          email: user.email,
-          subject: "Order Confirmation",
-          template: "order-confirmation.ejs",
-          data: mailData,
-        });
-      } catch (error: any) {
-        console.error("Error sending email:", error); // Log the error
-        return next(new ErrorHandler(`Failed to send email: ${error.message}`, 500));
+      if (!order || order.status !== 'created') {
+        console.log('Error creating order:', order);
+        return res.status(400).send("Failed to create order");
       }
 
-      user.courses.push({ courseId: course._id.toString() });
-      await user.save();
+      res.json(order);
 
-      await redis.set(req.user?.id, JSON.stringify(user));
-      const userId = req.user?._id?.toString();
-      if (userId) {
-        await redis.set(userId, JSON.stringify(user));
-      } else {
-        return next(new ErrorHandler("User ID is missing", 400));
-      }
-
-      await NotificationModel.create({
-        user: user._id,
-        title: "New Order",
-        message: `You have a new order for ${course.name}`,
-      });
-
-      course.purchased += 1;
-      await course.save();
-
-      newOrder(data, res, next);
-    } catch (error: any) {
-      console.error("Internal Server Error:", error); // Log the error
-      // Send detailed error message (only for development or with security measures)
-      res.status(500).json({
-        success: false,
-        message: "Internal Server Error",
-        error: process.env.NODE_ENV === "development" ? error.message : "An error occurred. Please try again later.",
-      });
+    } catch (error) {
+      console.error('Error in createOrder:', error); // Use console.error for logging errors
+      res.status(500).send("Internal Server Error");
     }
   }
 );
@@ -405,61 +102,51 @@ export const sendRazorpayKeyId = CatchAsyncError(
   }
 );
 
-export const newPayment = CatchAsyncError(
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { amount } = req.body;
 
-      // Validate the amount
-      if (!amount || amount <= 0) {
-        return next(new ErrorHandler("Invalid amount", 400));
-      }
 
-      const receipt = `order_rcptid_${Date.now()}`; // Generate a unique receipt ID
+// export const verifyPayment = CatchAsyncError(
+//   async (req: Request, res: Response, next: NextFunction) => {
+//     console.log('Received request body:', req.body); 
+//     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body
 
-      const order = await razorpay.orders.create({
-        amount: amount * 100, // Razorpay amount is in paise
-        currency: "INR",
-        receipt,
-        payment_capture: 1,
-      });
+//     const sha = crypto.createHmac("sha256", "4bPxRcU1h3sYMMC7YCvSNapL");
+    
 
-      res.status(201).json({
-        success: true,
-        order_id: order.id,
-        amount: order.amount,
-        currency: order.currency,
-        key_id: process.env.RAZORPAY_KEY_ID,
-      });
-    } catch (error: any) {
-      return next(new ErrorHandler(error.message, 500));
-    }
-  }
-);
+//     sha.update(`${razorpay_order_id}|${razorpay_payment_id}`);
+
+//     const digest = sha.digest("hex");
+
+//     if (digest !== razorpay_signature) {
+//       return res.status(400).json({ msg: " Transaction is not legit!" });
+//     }
+
+//     res.json({ msg: " Transaction is legit!", orderId: razorpay_order_id, paymentId: razorpay_payment_id });
+//   }
+// );
 
 export const verifyPayment = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
+      console.log('Received request body:', req.body);
+
       const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
 
-      const secret = process.env.RAZORPAY_KEY_SECRET as string;
+      // Use the secret key from environment variables
+      const secret = "4bPxRcU1h3sYMMC7YCvSNapL" // Ensure this is the correct secret for the environment (test/live)
 
-      const shasum = crypto.createHmac("sha256", secret);
-      shasum.update(`${razorpay_order_id}|${razorpay_payment_id}`);
-      const digest = shasum.digest("hex");
+      // Generate the HMAC signature
+      const sha = crypto.createHmac('sha256', secret);
+      sha.update(`${razorpay_order_id}|${razorpay_payment_id}`);
+      const digest = sha.digest('hex');
 
+      // Verify the signature
       if (digest !== razorpay_signature) {
-        return next(new ErrorHandler("Invalid payment signature", 400));
+        return res.status(400).json({ msg: 'Transaction is not legit!' });
       }
 
-      // Payment signature is valid
-      res.status(200).json({
-        success: true,
-        message: "Payment verified successfully",
-      });
-    } catch (error: any) {
-      return next(new ErrorHandler(error.message, 500));
+      res.json({ msg: 'Transaction is legit!', orderId: razorpay_order_id, paymentId: razorpay_payment_id });
+    } catch (error) {
+      next(error);
     }
   }
 );
-
