@@ -13,7 +13,11 @@ import {
   updateProfilePicture,
   updateUserInfo,
   updateUserRole,
-  resendOtp
+  resendOtp,
+  forgetPassword,
+  postResetPassword,
+  getResetPassword
+  
 } from "../controllers/user.controller";
 import { authorizeRoles, isAutheticated } from "../middleware/auth";
 const userRouter = express.Router();
@@ -21,13 +25,15 @@ const userRouter = express.Router();
 userRouter.post("/registration", registrationUser);
 
 userRouter.post("/activate-user", activateUser);
-//Resend OTP for activate Account
-userRouter.post('/resend-otp', resendOtp)
 
 userRouter.post("/login", loginUser);
 
 userRouter.get("/logout", isAutheticated, logoutUser);
 
+
+
+//Resend OTP for activate Account
+userRouter.post('/resend-otp',resendOtp)
 
 userRouter.get('/refreshtoken',updateAccessToken)
 
@@ -40,6 +46,11 @@ userRouter.put("/update-user-info",isAutheticated, updateUserInfo);
 userRouter.put("/update-user-password", isAutheticated, updatePassword);
 
 userRouter.put("/update-user-avatar", isAutheticated, updateProfilePicture);
+
+
+userRouter.get('/reset-password/:id/:token', getResetPassword);
+userRouter.post('/reset-password/:id/:token', postResetPassword);
+userRouter.post('/forget-password', forgetPassword);
 
 userRouter.get(
   "/get-users",
@@ -54,6 +65,7 @@ userRouter.put(
   authorizeRoles("admin"),
   updateUserRole
 );
+
 
 userRouter.delete(
   "/delete-user/:id",
