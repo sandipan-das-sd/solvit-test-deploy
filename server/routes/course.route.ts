@@ -100,7 +100,11 @@ import {
   GetYearsOfCourse,
   GetAllSubjects,
   GetQuestions,
- 
+  LikeQuestion,
+  DislikeQuestion,
+  getTotalLikesAndDislikes,
+  getUserLikeDislikeDetails,
+  getQuestionLikeDislikeDetails
  
 } from "../controllers/course.controller";
 import { authorizeRoles, isAutheticated } from "../middleware/auth";
@@ -220,9 +224,9 @@ courseRouter.put(
   editCourse
 );
 
-courseRouter.get("/get-course/:id", getSingleCourse);
+courseRouter.get("/get-course/:id",isAutheticated, getSingleCourse);
 
-courseRouter.get("/get-courses", getAllCourses);
+courseRouter.get("/get-courses",isAutheticated, getAllCourses);
 
 courseRouter.get(
   "/get-admin-courses",
@@ -254,5 +258,34 @@ courseRouter.delete(
   authorizeRoles("admin"),
   deleteCourse
 );
+// Like a question
+courseRouter.post("/course/:courseId/year/:yearId/subject/:subjectId/question/:questionId/like", isAutheticated, LikeQuestion);
+
+// Dislike a question
+courseRouter.post("/course/:courseId/year/:yearId/subject/:subjectId/question/:questionId/dislike", isAutheticated, DislikeQuestion);
+//get all like and dislike
+
+courseRouter.get(
+  "/course/:courseId/likes-dislikes",
+  isAutheticated,
+  authorizeRoles("admin"),
+  getTotalLikesAndDislikes
+);
+
+//get like and dislike by user
+courseRouter.get(
+  "/user/:userId/likes-dislikes",
+  isAutheticated,
+  getUserLikeDislikeDetails
+);
+
+//get like dislike count of each questions
+courseRouter.get(
+  "/course/:courseId/year/:yearId/subject/:subjectId/question/:questionId/likes-dislikes",
+  isAutheticated,
+  authorizeRoles("admin"),
+  getQuestionLikeDislikeDetails
+);
+
 
 export default courseRouter;

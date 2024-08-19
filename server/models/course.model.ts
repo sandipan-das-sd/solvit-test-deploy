@@ -1,26 +1,29 @@
 
+
+
+
+
 // import mongoose, { Document, Model, Schema } from "mongoose";
 // import { IUser } from "./user.model";
+
 // export interface IQuestion extends Document {
 //   _id: mongoose.Types.ObjectId;
-//   questionText: string; // Changed to lowercase
+//   questionText: string;
 //   questionImage: {
-//     url: string; // Changed to lowercase
-//     public_id: string; // Changed to lowercase
+//     url: string;
+//     public_id: string;
 //   };
-//   answerText: string; // Changed to lowercase
+//   answerText: string;
 //   answerImage: {
-//     url: string; // Changed to lowercase
-//     public_id: string; // Changed to lowercase
+//     url: string;
+//     public_id: string;
 //   };
 //   videoLink?: string;
 //   videoId?: string | null;
- 
 // }
 
 // export interface ISubject extends Document {
-//   // _id:string,
-//   _id: mongoose.Types.ObjectId,
+//   _id: mongoose.Types.ObjectId;
 //   name: string;
 //   questions: IQuestion[];
 // }
@@ -63,7 +66,7 @@
 // }
 
 // export interface ICourse extends Document {
-//   _id: string;
+//   _id: mongoose.Types.ObjectId;
 //   name: string;
 //   description: string;
 //   categories: string;
@@ -82,45 +85,40 @@
 //   years: IYear[];
 // }
 
-
 // const questionSchema = new Schema<IQuestion>({
-//   _id: mongoose.Types.ObjectId,
-//   questionText: String,
+//   _id: { type: Schema.Types.ObjectId, auto: true }, // Use Schema.Types.ObjectId
+//   questionText: { type: String}, // Add required: true if needed
 //   questionImage: {
-//     url: String,
-//     public_id: String,
+//     url: { type: String},
+//     public_id: { type: String},
 //   },
-//   answerText: String,
+//   answerText: { type: String},
 //   answerImage: {
-//     url: String,
-//     public_id: String,
+//     url: { type: String},
+//     public_id: { type: String},
 //   },
-//   videoLink: String,
-//   videoId: String,
-  
+//   videoLink: { type: String },
+//   videoId: { type: String },
 // });
 
 // const subjectSchema = new Schema<ISubject>({
-//   name: {
-//     type: String,
-    
-//   },
+//   name: { type: String },
 //   questions: [questionSchema],
 // });
 
 // const yearSchema = new Schema<IYear>({
-//   year: {
-//     type: Number,
-//     required: true,
-//   },
+//   year: { type: Number },
 //   subjects: [subjectSchema],
 // });
+
 
 // const commentSchema = new Schema<IComment>({
 //   user: Object,
 //   question: String,
 //   questionReplies: [Object],
 // }, { timestamps: true });
+
+
 
 // const reviewSchema = new Schema<IReview>({
 //   user: Object,
@@ -132,10 +130,16 @@
 //   commentReplies: [Object],
 // }, { timestamps: true });
 
+
+
+
 // const linkSchema = new Schema<ILink>({
 //   title: String,
 //   url: String,
 // });
+
+
+
 
 // const courseDataSchema = new Schema<ICourseData>({
 //   videoUrl: String,
@@ -150,6 +154,10 @@
 //   questions: [commentSchema],
 // });
 
+
+
+
+
 // const courseSchema = new Schema<ICourse>({
 //   name: {
 //     type: String,
@@ -161,7 +169,7 @@
 //   },
 //   categories: {
 //     type: String,
-//     required: true,
+    
 //   },
 //   price: {
 //     type: Number,
@@ -210,8 +218,6 @@
 // export default CourseModel;
 
 
-
-
 import mongoose, { Document, Model, Schema } from "mongoose";
 import { IUser } from "./user.model";
 
@@ -226,9 +232,15 @@ export interface IQuestion extends Document {
   answerImage: {
     url: string;
     public_id: string;
+
   };
   videoLink?: string;
   videoId?: string | null;
+  questiontag?: string | null;
+  likes?: number;
+  dislikes?: number;
+  likedBy?: mongoose.Types.ObjectId[];
+  dislikedBy?: mongoose.Types.ObjectId[];
 }
 
 export interface ISubject extends Document {
@@ -296,17 +308,23 @@ export interface ICourse extends Document {
 
 const questionSchema = new Schema<IQuestion>({
   _id: { type: Schema.Types.ObjectId, auto: true }, // Use Schema.Types.ObjectId
-  questionText: { type: String}, // Add required: true if needed
+  questionText: { type: String }, // Add required: true if needed
   questionImage: {
-    url: { type: String},
-    public_id: { type: String},
+    url: { type: String },
+    public_id: { type: String },
   },
-  answerText: { type: String},
+  answerText: { type: String },
   answerImage: {
-    url: { type: String},
-    public_id: { type: String},
+    url: { type: String },
+    public_id: { type: String },
+
   },
   videoLink: { type: String },
+  questiontag: { type: String },
+  likes: { type: Number, default: 0 },
+  dislikes: { type: Number, default: 0 },
+  likedBy: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+  dislikedBy: [{ type: Schema.Types.ObjectId, ref: 'User' }],
   videoId: { type: String },
 });
 
@@ -378,7 +396,7 @@ const courseSchema = new Schema<ICourse>({
   },
   categories: {
     type: String,
-    
+
   },
   price: {
     type: Number,

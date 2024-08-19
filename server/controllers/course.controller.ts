@@ -6,6 +6,7 @@ import { CatchAsyncError } from "../middleware/catchAsyncErrors";
 import ErrorHandler from "../utils/ErrorHandler";
 import cloudinary from "cloudinary";
 import { createCourse, getAllCoursesService } from "../services/course.service";
+import { Types } from 'mongoose';
 
 import { redis } from "../utils/redis";
 import mongoose from "mongoose";
@@ -1136,6 +1137,374 @@ export const DeleteQuestion = CatchAsyncError(async (req: Request, res: Response
 //     res.status(500).json({ message: 'Internal Server Error' });
 //   }
 // });
+
+
+
+
+
+
+
+//Like Dislike Start
+
+
+//Like a question
+
+// export const LikeQuestion = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+//   const { courseId, yearId, subjectId, questionId } = req.params;
+
+//   // Check if req.user is defined
+//   if (!req.user) {
+//     return res.status(401).json({ success: false, message: "User not authenticated" });
+//   }
+
+//   const userId = new Types.ObjectId(req.user._id);
+
+
+//   const course = await CourseModel.findById(courseId).populate({
+//     path: 'years.subjects.questions',
+//   });
+
+//   if (!course) {
+//     return res.status(404).json({ success: false, message: "Course not found" });
+//   }
+
+//   const year = course.years.find(y => y._id.toString() === yearId);
+//   if (!year) {
+//     return res.status(404).json({ success: false, message: "Year not found" });
+//   }
+
+//   const subject = year.subjects.find(s => s._id.toString() === subjectId);
+//   if (!subject) {
+//     return res.status(404).json({ success: false, message: "Subject not found" });
+//   }
+
+//   const question = subject.questions.find(q => q._id.toString() === questionId);
+//   if (!question) {
+//     return res.status(404).json({ success: false, message: "Question not found" });
+//   }
+
+//   // Initialize fields if they are undefined
+//   question.likes = question.likes ?? 0;
+//   question.dislikes = question.dislikes ?? 0;
+//   question.likedBy = question.likedBy ?? [];
+//   question.dislikedBy = question.dislikedBy ?? [];
+
+//   if (question.likedBy.includes(userId)) {
+//     return res.status(400).json({ success: false, message: "You have already liked this question" });
+//   }
+
+//   if (question.dislikedBy.includes(userId)) {
+//     question.dislikes -= 1;
+//     // Manually filter out the userId from dislikedBy
+//     question.dislikedBy = question.dislikedBy.filter(id => !id.equals(userId));
+//   }
+//   question.likes += 1;
+//   question.likedBy.push(userId);
+
+//   await course.save();
+
+//   res.status(200).json({ success: true, likes: question.likes });
+// });
+
+export const LikeQuestion = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+  const { courseId, yearId, subjectId, questionId } = req.params;
+
+  if (!req.user) {
+    return res.status(401).json({ success: false, message: "User not authenticated" });
+  }
+
+  const userId = new Types.ObjectId(req.user._id);
+
+  const course = await CourseModel.findById(courseId).populate({
+    path: 'years.subjects.questions',
+  });
+
+  if (!course) {
+    return res.status(404).json({ success: false, message: "Course not found" });
+  }
+
+  const year = course.years.find(y => y._id.toString() === yearId);
+  if (!year) {
+    return res.status(404).json({ success: false, message: "Year not found" });
+  }
+
+  const subject = year.subjects.find(s => s._id.toString() === subjectId);
+  if (!subject) {
+    return res.status(404).json({ success: false, message: "Subject not found" });
+  }
+
+  const question = subject.questions.find(q => q._id.toString() === questionId);
+  if (!question) {
+    return res.status(404).json({ success: false, message: "Question not found" });
+  }
+
+  question.likes = question.likes ?? 0;
+  question.dislikes = question.dislikes ?? 0;
+  question.likedBy = question.likedBy ?? [];
+  question.dislikedBy = question.dislikedBy ?? [];
+
+  if (question.likedBy.includes(userId)) {
+    return res.status(400).json({ success: false, message: "You have already liked this question" });
+  }
+
+  if (question.dislikedBy.includes(userId)) {
+    question.dislikes -= 1;
+    question.dislikedBy = question.dislikedBy.filter(id => !id.equals(userId));
+  }
+
+  question.likes += 1;
+  question.likedBy.push(userId);
+
+  await course.save();
+
+  res.status(200).json({ success: true, likes: question.likes });
+});
+
+//dislike a question
+
+
+// export const DislikeQuestion = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+//   const { courseId, yearId, subjectId, questionId } = req.params;
+
+//   // Check if req.user is defined
+//   if (!req.user) {
+//     return res.status(401).json({ success: false, message: "User not authenticated" });
+//   }
+
+//   const userId = new Types.ObjectId(req.user._id); // Convert userId to ObjectId
+
+//   const course = await CourseModel.findById(courseId).populate({
+//     path: 'years.subjects.questions',
+//   });
+
+//   if (!course) {
+//     return res.status(404).json({ success: false, message: "Course not found" });
+//   }
+
+//   const year = course.years.find(y => y._id.toString() === yearId);
+//   if (!year) {
+//     return res.status(404).json({ success: false, message: "Year not found" });
+//   }
+
+//   const subject = year.subjects.find(s => s._id.toString() === subjectId);
+//   if (!subject) {
+//     return res.status(404).json({ success: false, message: "Subject not found" });
+//   }
+
+//   const question = subject.questions.find(q => q._id.toString() === questionId);
+//   if (!question) {
+//     return res.status(404).json({ success: false, message: "Question not found" });
+//   }
+
+//   // Ensure fields are initialized
+//   question.likes = question.likes ?? 0;
+//   question.dislikes = question.dislikes ?? 0;
+//   question.likedBy = question.likedBy ?? [];
+//   question.dislikedBy = question.dislikedBy ?? [];
+
+//   if (question.dislikedBy.includes(userId)) {
+//     return res.status(400).json({ success: false, message: "You have already disliked this question" });
+//   }
+
+//   if (question.likedBy.includes(userId)) {
+//     question.likes -= 1;
+//     question.likedBy = question.likedBy.filter(id => !id.equals(userId));
+//   }
+
+//   question.dislikes += 1;
+//   question.dislikedBy.push(userId);
+
+//   await course.save();
+
+//   res.status(200).json({
+//     success: true,
+//     message: "Dislike registered",
+//     dislike: question.dislikes,
+//   });
+// });
+
+export const DislikeQuestion = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+  const { courseId, yearId, subjectId, questionId } = req.params;
+
+  if (!req.user) {
+    return res.status(401).json({ success: false, message: "User not authenticated" });
+  }
+
+  const userId = new Types.ObjectId(req.user._id);
+
+  const course = await CourseModel.findById(courseId).populate({
+    path: 'years.subjects.questions',
+  });
+
+  if (!course) {
+    return res.status(404).json({ success: false, message: "Course not found" });
+  }
+
+  const year = course.years.find(y => y._id.toString() === yearId);
+  if (!year) {
+    return res.status(404).json({ success: false, message: "Year not found" });
+  }
+
+  const subject = year.subjects.find(s => s._id.toString() === subjectId);
+  if (!subject) {
+    return res.status(404).json({ success: false, message: "Subject not found" });
+  }
+
+  const question = subject.questions.find(q => q._id.toString() === questionId);
+  if (!question) {
+    return res.status(404).json({ success: false, message: "Question not found" });
+  }
+
+  question.likes = question.likes ?? 0;
+  question.dislikes = question.dislikes ?? 0;
+  question.likedBy = question.likedBy ?? [];
+  question.dislikedBy = question.dislikedBy ?? [];
+
+  if (question.dislikedBy.includes(userId)) {
+    return res.status(400).json({ success: false, message: "You have already disliked this question" });
+  }
+
+  if (question.likedBy.includes(userId)) {
+    question.likes -= 1;
+    question.likedBy = question.likedBy.filter(id => !id.equals(userId));
+  }
+
+  question.dislikes += 1;
+  question.dislikedBy.push(userId);
+
+  await course.save();
+
+  res.status(200).json({ success: true, dislikes: question.dislikes });
+});
+
+
+
+
+
+//total like and dislike
+export const getTotalLikesAndDislikes = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+  const { courseId } = req.params;
+
+  const course = await CourseModel.findById(courseId).populate({
+    path: 'years.subjects.questions',
+  });
+
+  if (!course) {
+    return res.status(404).json({ success: false, message: "Course not found" });
+  }
+
+  const allQuestions = course.years
+    .flatMap(year => year.subjects.flatMap(subject => subject.questions));
+
+  const totalLikes = allQuestions.reduce((total, question) => total + (question.likes ?? 0), 0);
+  const totalDislikes = allQuestions.reduce((total, question) => total + (question.dislikes ?? 0), 0);
+
+  res.status(200).json({
+    success: true,
+    totalLikes,
+    totalDislikes,
+  });
+});
+
+
+//GET LIKE AND DISLIKE BY USER
+
+export const getUserLikeDislikeDetails = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+  const { userId } = req.params;
+
+  const questions = await CourseModel.aggregate([
+    { $unwind: "$years" },
+    { $unwind: "$years.subjects" },
+    { $unwind: "$years.subjects.questions" },
+    {
+      $match: {
+        "years.subjects.questions.likedBy": new Types.ObjectId(userId),
+        "years.subjects.questions.dislikedBy": new Types.ObjectId(userId)
+      }
+    },
+    {
+      $project: {
+        _id: "$years.subjects.questions._id",
+        questionText: "$years.subjects.questions.questionText",
+        likes: "$years.subjects.questions.likes",
+        dislikes: "$years.subjects.questions.dislikes",
+        likedBy: {
+          $cond: {
+            if: { $in: [new Types.ObjectId(userId), "$years.subjects.questions.likedBy"] },
+            then: true,
+            else: false
+          }
+        },
+        dislikedBy: {
+          $cond: {
+            if: { $in: [new Types.ObjectId(userId), "$years.subjects.questions.dislikedBy"] },
+            then: true,
+            else: false
+          }
+        }
+      }
+    }
+  ]);
+
+  res.status(200).json({
+    success: true,
+    questions
+  });
+});
+
+
+//Get Like and Dislike Counts and Details for Each Question
+
+export const getQuestionLikeDislikeDetails = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+  const { courseId, yearId, subjectId, questionId } = req.params;
+
+  const course = await CourseModel.findById(courseId).populate({
+    path: 'years.subjects.questions',
+    populate: {
+      path: 'likedBy dislikedBy',
+      select: 'name email'
+    }
+  });
+
+  if (!course) {
+    return res.status(404).json({ success: false, message: "Course not found" });
+  }
+
+  const year = course.years.find(y => y._id.toString() === yearId);
+  if (!year) {
+    return res.status(404).json({ success: false, message: "Year not found" });
+  }
+
+  const subject = year.subjects.find(s => s._id.toString() === subjectId);
+  if (!subject) {
+    return res.status(404).json({ success: false, message: "Subject not found" });
+  }
+
+  const question = subject.questions.find(q => q._id.toString() === questionId);
+  if (!question) {
+    return res.status(404).json({ success: false, message: "Question not found" });
+  }
+
+  res.status(200).json({
+    success: true,
+    question: {
+      questionId: question._id,
+      questionText: question.questionText,
+      likes: question.likes ?? 0,
+      dislikes: question.dislikes ?? 0,
+      likedBy: (question.likedBy || []).map((user: any) => ({
+        userId: user._id,
+        userName: user.name,
+        email: user.email
+      })),
+      dislikedBy: (question.dislikedBy || []).map((user: any) => ({
+        userId: user._id,
+        userName: user.name,
+        email: user.email
+      })),
+    }
+  });
+});
 
 
 export const editCourse = CatchAsyncError(
