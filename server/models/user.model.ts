@@ -11,6 +11,8 @@ export interface IUser extends Document {
   _id:string,
   name: string;
   email: string;
+  phone: string,
+  location: string,
   password: string;
   avatar: {
     public_id: string;

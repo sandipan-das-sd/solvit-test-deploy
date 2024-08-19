@@ -23,28 +23,77 @@ import {
 } from "../services/user.service";
 import cloudinary from "cloudinary";
 
+
+
+//SMS Auth Details (Tiliwo)
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const client = require('twilio')(accountSid, authToken)
+
+const sendSMS = async (body: string, to: string) => {
+  let formattedNumber = to.startsWith('91') ? to : `91${to}`;
+  const msgOptions = {
+
+    messagingServiceSid: process.env.TWILIO_MESSAGING_SERVICE_SID,
+    to: formattedNumber,
+    body
+  };
+
+  try {
+    const message = await client.messages.create(msgOptions);
+    console.log(`SMS sent successfully: ${message.sid}`);
+  } catch (error) {
+    console.error('Error sending SMS:', error);
+  }
+};
+
+
+//whatsapp sms
+
+const sendWhatsAppMessage = async (body: string, to: string) => {
+  const msgOptions = {
+    from: 'whatsapp:+14155238886',
+    to: `whatsapp:${to}`,
+    body
+  };
+
+  try {
+    const message = await client.messages.create(msgOptions);
+    console.log(`WhatsApp message sent successfully: ${message.sid}`);
+  } catch (error) {
+    console.error('Error sending WhatsApp message:', error);
+  }
+};
+
 // register user
 interface IRegistrationBody {
   name: string;
   email: string;
   password: string;
   avatar?: string;
+  phone?: string;
+  location?: string;
 }
 
 export const registrationUser = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { name, email, password } = req.body;
+      const { name, email, password,phone, location } = req.body;
 
       const isEmailExist = await userModel.findOne({ email });
       if (isEmailExist) {
         return next(new ErrorHandler("Email already exist", 400));
       }
-      
+      const isPhoneExists = await userModel.findOne({ phone });
+      if (isPhoneExists) {
+        return next(new ErrorHandler("Mobile already exist", 400));
+      }
       const user: IRegistrationBody = {
         name,
         email,
         password,
+        phone,
+        location
       };
 
       const activationToken = createActivationToken(user);
@@ -64,7 +113,12 @@ export const registrationUser = CatchAsyncError(
           template: "activation-mail.ejs",
           data,
         });
+        const smsBody = `Dear ${name}, you have successfully registered.Please Verify your Account to get activated`;
+        await sendSMS(smsBody, phone);
 
+        // Send WhatsApp message
+        const whatsappBody = `Dear ${name}, you have successfully registered.Please Verify your Account to get activated`;
+        await sendWhatsAppMessage(whatsappBody, phone);
         res.status(201).json({
           success: true,
           message: `Please check your email: ${user.email} to activate your account!`,
@@ -124,17 +178,26 @@ export const activateUser = CatchAsyncError(
         return next(new ErrorHandler("Invalid activation code", 400));
       }
 
-      const { name, email, password } = newUser.user;
+      const { name, email, password, phone, location } = newUser.user;
 
       const existUser = await userModel.findOne({ email });
-
+      const phoneExits = await userModel.findOne({ phone });
+      if (phoneExits) {
+        return next(new ErrorHandler("Mobile already exist", 400));
+      }
       if (existUser) {
         return next(new ErrorHandler("Email already exist", 400));
       }
+      const smsBody = `Dear ${name}, you have successfully registered.`;
+      await sendSMS(smsBody, phone);
+      const whatsappBody = `Dear ${name}, you have successfully registered.`;
+      await sendWhatsAppMessage(whatsappBody, phone);
       const user = await userModel.create({
         name,
         email,
         password,
+        phone,
+        location
       });
 
       res.status(201).json({
