@@ -165,25 +165,71 @@ export const coursesApi = apiSlice.injectEndpoints({
         credentials: 'include',
       }),
     }),
+    // addQuestionToSubject: builder.mutation({
+    //   query: ({ courseId, yearId, subjectId, questionText, answerText, videoLink, questionImage, answerImage, questiontag }) => {
+    //     const formData = new FormData();
+    //     formData.append('questionText', questionText);
+    //     formData.append('answerText', answerText);
+    //     formData.append('videoLink', videoLink);
+    //     formData.append('questiontag', JSON.stringify(questiontag));
+    //     if (questionImage) formData.append('questionImage', questionImage);
+    //     if (answerImage) formData.append('answerImage', answerImage);
+
+    //     return {
+    //       url: `course/${courseId}/year/${yearId}/subject/${subjectId}/question`,
+    //       method: 'POST',
+    //       body: formData,
+    //       credentials: 'include',
+    //     };
+    //   },
+    // }),
+
+    // getQuestionsToSubject: builder.query({
+    //   query: ({ courseId, yearId, subjectId }) => ({
+    //     url: `course/${courseId}/year/${yearId}/subject/${subjectId}/questions`,
+    //     method: 'GET',
+    //     credentials: 'include',
+    //   }),
+    // }),
+    // // updateQuestionInSubject: builder.mutation({
+    // //   query: ({ courseId, yearId, subjectId, questionId, text, answers }) => ({
+    // //     url: `course/${courseId}/year/${yearId}/subject/${subjectId}/question/${questionId}`,
+    // //     method: 'PUT',
+    // //     body: { text, answers },
+    // //     credentials: 'include',
+    // //   }),
+    // // }),
+
+    // updateQuestionInSubject: builder.mutation({
+    //   query: ({ courseId, yearId, subjectId, questionId, questionText, answerText, videoLink, questionImage, answerImage, questiontag }) => {
+    //     const formData = new FormData();
+    //     formData.append('questionText', questionText);
+    //     formData.append('answerText', answerText);
+    //     formData.append('videoLink', videoLink);
+    //     formData.append('questiontag', JSON.stringify(questiontag));
+    //     if (questionImage) {
+    //       formData.append('questionImage', questionImage);
+    //     }
+    //     if (answerImage) {
+    //       formData.append('answerImage', answerImage);
+    //     }
+
+    //     return {
+    //       url: `course/${courseId}/year/${yearId}/subject/${subjectId}/question/${questionId}`,
+    //       method: 'PUT',
+    //       body: formData,
+    //       credentials: 'include',
+    //     };
+    //   },
+    // }),
     addQuestionToSubject: builder.mutation({
-      query: ({ courseId, yearId, subjectId, questionText, answerText, videoLink, questionImage, answerImage, questiontag }) => {
-        const formData = new FormData();
-        formData.append('questionText', questionText);
-        formData.append('answerText', answerText);
-        formData.append('videoLink', videoLink);
-        formData.append('questiontag', JSON.stringify(questiontag));
-        if (questionImage) formData.append('questionImage', questionImage);
-        if (answerImage) formData.append('answerImage', answerImage);
-
-        return {
-          url: `course/${courseId}/year/${yearId}/subject/${subjectId}/question`,
-          method: 'POST',
-          body: formData,
-          credentials: 'include',
-        };
-      },
+      query: ({ courseId, yearId, subjectId, formData }) => ({
+        url: `course/${courseId}/year/${yearId}/subject/${subjectId}/question`,
+        method: 'POST',
+        body: formData,
+        credentials: 'include',
+      }),
     }),
-
     getQuestionsToSubject: builder.query({
       query: ({ courseId, yearId, subjectId }) => ({
         url: `course/${courseId}/year/${yearId}/subject/${subjectId}/questions`,
@@ -191,38 +237,14 @@ export const coursesApi = apiSlice.injectEndpoints({
         credentials: 'include',
       }),
     }),
-    // updateQuestionInSubject: builder.mutation({
-    //   query: ({ courseId, yearId, subjectId, questionId, text, answers }) => ({
-    //     url: `course/${courseId}/year/${yearId}/subject/${subjectId}/question/${questionId}`,
-    //     method: 'PUT',
-    //     body: { text, answers },
-    //     credentials: 'include',
-    //   }),
-    // }),
-
     updateQuestionInSubject: builder.mutation({
-      query: ({ courseId, yearId, subjectId, questionId, questionText, answerText, videoLink, questionImage, answerImage, questiontag }) => {
-        const formData = new FormData();
-        formData.append('questionText', questionText);
-        formData.append('answerText', answerText);
-        formData.append('videoLink', videoLink);
-        formData.append('questiontag', JSON.stringify(questiontag));
-        if (questionImage) {
-          formData.append('questionImage', questionImage);
-        }
-        if (answerImage) {
-          formData.append('answerImage', answerImage);
-        }
-
-        return {
-          url: `course/${courseId}/year/${yearId}/subject/${subjectId}/question/${questionId}`,
-          method: 'PUT',
-          body: formData,
-          credentials: 'include',
-        };
-      },
+      query: ({ courseId, yearId, subjectId, questionId, formData }) => ({
+        url: `course/${courseId}/year/${yearId}/subject/${subjectId}/question/${questionId}`,
+        method: 'PUT',
+        body: formData,
+        credentials: 'include',
+      }),
     }),
-
 
     deleteQuestion: builder.mutation({
       query: ({ courseId, yearId, subjectId, questionId }) => ({
