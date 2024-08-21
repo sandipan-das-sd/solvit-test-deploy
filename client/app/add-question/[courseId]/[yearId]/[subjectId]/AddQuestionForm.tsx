@@ -766,9 +766,9 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ courseId, yearId, sub
                                     </td>
 
                                     <td className="border px-4 py-2">
-                                        {question.questiontag && question.questiontag.length > 0 ? (
+                                        {Array.isArray(question.questiontag) && question.questiontag.length > 0 ? (
                                             <div className="flex flex-wrap gap-1">
-                                                {question.questiontag.map((tag:any, tagIndex:any) => (
+                                                {question.questiontag.map((tag: string, tagIndex: number) => (
                                                     <span key={tagIndex} className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">
                                                         {tag}
                                                     </span>
