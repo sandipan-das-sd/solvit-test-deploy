@@ -166,11 +166,12 @@ export const coursesApi = apiSlice.injectEndpoints({
       }),
     }),
     addQuestionToSubject: builder.mutation({
-      query: ({ courseId, yearId, subjectId, questionText, answerText, videoLink, questionImage, answerImage }) => {
+      query: ({ courseId, yearId, subjectId, questionText, answerText, videoLink, questionImage, answerImage, questiontag }) => {
         const formData = new FormData();
         formData.append('questionText', questionText);
         formData.append('answerText', answerText);
         formData.append('videoLink', videoLink);
+        formData.append('questiontag', JSON.stringify(questiontag));
         if (questionImage) formData.append('questionImage', questionImage);
         if (answerImage) formData.append('answerImage', answerImage);
 
@@ -200,11 +201,12 @@ export const coursesApi = apiSlice.injectEndpoints({
     // }),
 
     updateQuestionInSubject: builder.mutation({
-      query: ({ courseId, yearId, subjectId, questionId, questionText, answerText, videoLink, questionImage, answerImage }) => {
+      query: ({ courseId, yearId, subjectId, questionId, questionText, answerText, videoLink, questionImage, answerImage, questiontag }) => {
         const formData = new FormData();
         formData.append('questionText', questionText);
         formData.append('answerText', answerText);
         formData.append('videoLink', videoLink);
+        formData.append('questiontag', JSON.stringify(questiontag));
         if (questionImage) {
           formData.append('questionImage', questionImage);
         }

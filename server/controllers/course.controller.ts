@@ -647,7 +647,7 @@ export const GetAllSubjects = CatchAsyncError(async (req: Request, res: Response
 export const AddQuestToSubject = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { courseId, yearId, subjectId } = req.params;
-    const { questionText, answerText, videoLink } = req.body;
+    const { questionText, answerText, videoLink, questiontag } = req.body;
     const questionImage = req.files?.questionImage;
     const answerImage = req.files?.answerImage;
 
@@ -709,6 +709,7 @@ export const AddQuestToSubject = CatchAsyncError(async (req: Request, res: Respo
       },
       videoLink,
       videoId,
+      questiontag: questiontag || []
     };
 
     subject.questions.push(newQuestion as any); // Casting to `any` to bypass TypeScript error
@@ -861,6 +862,7 @@ export const GetQuestions = CatchAsyncError(async (req: Request, res: Response, 
       answerImage: question.answerImage,
       videoLink: question.videoLink,
       videoId: question.videoId,
+      questiontag: question.questiontag,
     }));
 
     res.status(200).json({
@@ -878,7 +880,7 @@ export const GetQuestions = CatchAsyncError(async (req: Request, res: Response, 
 export const UpdateQuestInSubject = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { courseId, yearId, subjectId, questionId } = req.params;
-    const { questionText, answerText, videoLink } = req.body;
+    const { questionText, answerText, videoLink, questiontag } = req.body;
     const questionImage = req.files?.questionImage;
     const answerImage = req.files?.answerImage;
 
@@ -930,6 +932,7 @@ export const UpdateQuestInSubject = CatchAsyncError(async (req: Request, res: Re
     question.questionText = questionText || question.questionText;
     question.answerText = answerText || question.answerText;
     question.videoLink = videoLink || question.videoLink;
+    question.questiontag = questiontag || question.questiontag
 
     if (questionImageUrl) {
       question.questionImage.url = questionImageUrl;

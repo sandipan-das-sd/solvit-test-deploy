@@ -388,7 +388,9 @@ interface IQuestion {
         public_id: string;
     };
     videoLink?: string;
-    videoId?: string; // Extracted video ID
+    videoId?: string; 
+    questiontag?: any;
+   
     order: number;
 }
 
@@ -416,7 +418,7 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ courseId, yearId, sub
     });
     const [updateQuestionInSubject, { isLoading: isUpdating }] = useUpdateQuestionInSubjectMutation();
     const [deleteQuestion, { isLoading: isDeleting }] = useDeleteQuestionMutation();
-
+    const [questiontag, setQuestiontag] = useState<string[]>([]);   
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>, setImage: React.Dispatch<React.SetStateAction<File | null>>) => {
         const file = e.target.files?.[0];
         if (file) {
@@ -439,6 +441,7 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ courseId, yearId, sub
                     videoLink,
                     questionImage,
                     answerImage,
+                    questiontag, 
                 }).unwrap();
                 toast.success('Question updated successfully!');
             } else {
@@ -447,10 +450,12 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ courseId, yearId, sub
                     yearId,
                     subjectId,
                     questionText,
+                    
                     answerText,
                     videoLink,
                     questionImage,
                     answerImage,
+                    questiontag, 
                 }).unwrap();
                 toast.success('Question added successfully!');
             }
@@ -462,6 +467,7 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ courseId, yearId, sub
             setVideoLink('');
             setQuestionImage(null);
             setAnswerImage(null);
+            setQuestiontag([]); // Add this line
             setIsEditMode(false);
             setEditQuestionId(null);
         } catch (error) {
@@ -474,86 +480,14 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ courseId, yearId, sub
         setIsFormVisible(!isFormVisible);
     };
 
-    // const handleEditQuestion = (questionId: string) => {
-    //     const question = questionsData?.questions.find(q => q._id === questionId);
-    //     if (question) {
-    //         setQuestionText(question.questionText);
-    //         setAnswerText(question.answerText);
-
-    //         // Check if questionImage and answerImage are available and create File objects if needed
-    //         if (question.questionImage?.url) {
-    //             fetch(question.questionImage.url)
-    //                 .then(res => res.blob())
-    //                 .then(blob => {
-    //                     const file = new File([blob], "questionImage", { type: blob.type });
-    //                     setQuestionImage(file);
-    //                 });
-    //         } else {
-    //             setQuestionImage(null);
-    //         }
-
-    //         if (question.answerImage?.url) {
-    //             fetch(question.answerImage.url)
-    //                 .then(res => res.blob())
-    //                 .then(blob => {
-    //                     const file = new File([blob], "answerImage", { type: blob.type });
-    //                     setAnswerImage(file);
-    //                 });
-    //         } else {
-    //             setAnswerImage(null);
-    //         }
-
-    //         setVideoLink(question.videoLink);
-    //         setQuestionType(question.questionImage ? 'image' : 'text');
-    //         setAnswerType(question.answerImage ? 'image' : 'text');
-    //         setEditQuestionId(questionId);
-    //         setIsEditMode(true);
-    //         setIsFormVisible(true);
-    //     }
-    // };
-
-    // const handleEditQuestion = (questionId: string) => {
-    //     const question = questionsData?.questions.find((q: IQuestion) => q._id === questionId);
-    //     if (question) {
-    //         setQuestionText(question.questionText);
-    //         setAnswerText(question.answerText);
-
-    //         // Check if questionImage and answerImage are available and create File objects if needed
-    //         if (question.questionImage?.url) {
-    //             fetch(question.questionImage.url)
-    //                 .then(res => res.blob())
-    //                 .then(blob => {
-    //                     const file = new File([blob], "questionImage", { type: blob.type });
-    //                     setQuestionImage(file);
-    //                 });
-    //         } else {
-    //             setQuestionImage(null);
-    //         }
-
-    //         if (question.answerImage?.url) {
-    //             fetch(question.answerImage.url)
-    //                 .then(res => res.blob())
-    //                 .then(blob => {
-    //                     const file = new File([blob], "answerImage", { type: blob.type });
-    //                     setAnswerImage(file);
-    //                 });
-    //         } else {
-    //             setAnswerImage(null);
-    //         }
-
-    //         setVideoLink(question.videoLink);
-    //         setQuestionType(question.questionImage ? 'image' : 'text');
-    //         setAnswerType(question.answerImage ? 'image' : 'text');
-    //         setEditQuestionId(questionId);
-    //         setIsEditMode(true);
-    //         setIsFormVisible(true);
-    //     }
-    // };
+    
     const handleEditQuestion = (questionId: string) => {
         const question = questionsData?.questions.find((q: IQuestion) => q._id.toString() === questionId);
         if (question) {
             setQuestionText(question.questionText);
             setAnswerText(question.answerText);
+            setVideoLink(question.videoLink || '');
+            setQuestiontag(question.questiontag || []);
 
             // Check if questionImage and answerImage are available and create File objects if needed
             if (question.questionImage?.url) {
@@ -588,7 +522,10 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ courseId, yearId, sub
     };
 
 
-
+    const handleQuestiontagChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const tags = e.target.value.split(',').map(tag => tag.trim());
+        setQuestiontag(tags);
+    };
     const handleDeleteQuestion = async (questionId: string) => {
         try {
             await deleteQuestion({
@@ -755,6 +692,17 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ courseId, yearId, sub
                                 className="mt-1 block w-full border border-gray-300 rounded p-2"
                             />
                         </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700">Question Tags (comma-separated)</label>
+                            <input
+                                type="text"
+                                value={questiontag.join(', ')}
+                                onChange={handleQuestiontagChange}
+                                className="mt-1 block w-full border border-gray-300 rounded p-2"
+                                placeholder="e.g. math, algebra, equations"
+                            />
+                        </div>
+
 
                         <button
                             type="submit"
@@ -781,6 +729,7 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ courseId, yearId, sub
                                 <th className="py-2">Answer Text</th>
                                 <th className="py-2">Answer Image</th>
                                 <th className="py-2">Video Link</th>
+                                 <th className="py-2">Tags</th>    
                                 <th className="py-2">Actions</th>
                             </tr>
                         </thead>
@@ -813,6 +762,20 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ courseId, yearId, sub
                                             <a href={question.videoLink} target="_blank" rel="noopener noreferrer">
                                                 {question.videoLink}
                                             </a>
+                                        )}
+                                    </td>
+
+                                    <td className="border px-4 py-2">
+                                        {question.questiontag && question.questiontag.length > 0 ? (
+                                            <div className="flex flex-wrap gap-1">
+                                                {question.questiontag.map((tag:any, tagIndex:any) => (
+                                                    <span key={tagIndex} className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">
+                                                        {tag}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        ) : (
+                                            <span className="text-gray-400">No tags</span>
                                         )}
                                     </td>
                                     <td className="border px-4 py-2 space-x-2">

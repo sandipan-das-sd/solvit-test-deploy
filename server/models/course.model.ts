@@ -236,6 +236,7 @@ export interface IQuestion extends Document {
   };
   videoLink?: string;
   videoId?: string | null;
+  
   questiontag?: string | null;
   likes?: number;
   dislikes?: number;
