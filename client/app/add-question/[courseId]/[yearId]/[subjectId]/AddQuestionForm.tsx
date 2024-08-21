@@ -475,42 +475,50 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ courseId, yearId, sub
     //         toast.error('Error adding/updating question');
     //     }
     // };
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        try {
-            const questionData = {
-                courseId,
-                yearId,
-                subjectId,
-                questionText,
-                answerText,
-                videoLink,
-                questionImage,
-                answerImage,
-                questiontag: questiontag.length > 0 ? questiontag : undefined,
-            };
+        // Clean up tags: remove empty strings and trim whitespace
+        const cleanedTags = questiontag.filter(tag => tag.trim() !== '').map(tag => tag.trim());
 
+        try {
             if (isEditMode && editQuestionId) {
                 await updateQuestionInSubject({
-                    ...questionData,
+                    courseId,
+                    yearId,
+                    subjectId,
                     questionId: editQuestionId,
+                    questionText,
+                    answerText,
+                    videoLink,
+                    questionImage,
+                    answerImage,
+                    questiontag: cleanedTags.length > 0 ? cleanedTags : undefined,
                 }).unwrap();
                 toast.success('Question updated successfully!');
             } else {
-                await addQuestionToSubject(questionData).unwrap();
+                await addQuestionToSubject({
+                    courseId,
+                    yearId,
+                    subjectId,
+                    questionText,
+                    answerText,
+                    videoLink,
+                    questionImage,
+                    answerImage,
+                    questiontag: cleanedTags.length > 0 ? cleanedTags : undefined,
+                }).unwrap();
                 toast.success('Question added successfully!');
             }
-            refetchQuestions();
-            setIsFormVisible(false);
-            // Clear input fields
+            refetchQuestions(); // Fetch questions after adding/updating
+            setIsFormVisible(false); // Close the modal after submitting
+            // Clear input fields after successful submission
             setQuestionText('');
             setAnswerText('');
             setVideoLink('');
             setQuestionImage(null);
             setAnswerImage(null);
-            setQuestiontag([]);
+            setQuestiontag([]); // Reset tags to an empty array
             setIsEditMode(false);
             setEditQuestionId(null);
         } catch (error) {
@@ -518,6 +526,7 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ courseId, yearId, sub
             toast.error('Error adding/updating question');
         }
     };
+   
     const toggleFormVisibility = () => {
         setIsFormVisible(!isFormVisible);
     };
@@ -808,6 +817,19 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ courseId, yearId, sub
                                         )}
                                     </td>
 
+                                  {/* <td className="border px-4 py-2">
+                                        {Array.isArray(question.questiontag) && question.questiontag.length > 0 ? (
+                                            <div className="flex flex-wrap gap-1">
+                                                {question.questiontag.map((tag: string, tagIndex: number) => (
+                                                    <span key={tagIndex} className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">
+                                                        {tag}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        ) : (
+                                            <span className="text-gray-400">No tags</span>
+                                        )}
+                                    </td> */}
                                     <td className="border px-4 py-2">
                                         {Array.isArray(question.questiontag) && question.questiontag.length > 0 ? (
                                             <div className="flex flex-wrap gap-1">
