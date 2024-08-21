@@ -521,11 +521,12 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ courseId, yearId, sub
         }
     };
 
-
     const handleQuestiontagChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const tags = e.target.value.split(',').map(tag => tag.trim());
-        setQuestiontag(tags);
+        const tagsInput = e.target.value;
+        const tagsArray = tagsInput.split(',').map(tag => tag.trim()).filter(tag => tag !== '');
+        setQuestiontag(tagsArray);
     };
+ 
     const handleDeleteQuestion = async (questionId: string) => {
         try {
             await deleteQuestion({
