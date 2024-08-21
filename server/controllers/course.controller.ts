@@ -648,6 +648,7 @@ export const AddQuestToSubject = CatchAsyncError(async (req: Request, res: Respo
   try {
     const { courseId, yearId, subjectId } = req.params;
     const { questionText, answerText, videoLink, questiontag } = req.body;
+    const parsedQuestionTag = Array.isArray(questiontag) ? questiontag : JSON.parse(questiontag || '[]');
     const questionImage = req.files?.questionImage;
     const answerImage = req.files?.answerImage;
 
@@ -709,7 +710,7 @@ export const AddQuestToSubject = CatchAsyncError(async (req: Request, res: Respo
       },
       videoLink,
       videoId,
-      questiontag: questiontag || []
+      questiontag: parsedQuestionTag,
     };
 
     subject.questions.push(newQuestion as any); // Casting to `any` to bypass TypeScript error

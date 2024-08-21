@@ -237,7 +237,7 @@ export interface IQuestion extends Document {
   videoLink?: string;
   videoId?: string | null;
   
-  questiontag?: string | null;
+  questiontag?: string[]; 
   likes?: number;
   dislikes?: number;
   likedBy?: mongoose.Types.ObjectId[];
@@ -321,7 +321,7 @@ const questionSchema = new Schema<IQuestion>({
 
   },
   videoLink: { type: String },
-  questiontag: { type: String },
+  questiontag: { type: [String], default: [] },
   likes: { type: Number, default: 0 },
   dislikes: { type: Number, default: 0 },
   likedBy: [{ type: Schema.Types.ObjectId, ref: 'User' }],

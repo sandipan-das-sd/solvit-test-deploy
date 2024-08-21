@@ -538,8 +538,7 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ courseId, yearId, sub
             setQuestionText(question.questionText);
             setAnswerText(question.answerText);
             setVideoLink(question.videoLink || '');
-            setQuestiontag(Array.isArray(question.questiontag) ? question.questiontag : []);
-
+            setQuestiontag(question.questiontag ? JSON.parse(question.questiontag) : []);
             // Check if questionImage and answerImage are available and create File objects if needed
             if (question.questionImage?.url) {
                 fetch(question.questionImage.url)
