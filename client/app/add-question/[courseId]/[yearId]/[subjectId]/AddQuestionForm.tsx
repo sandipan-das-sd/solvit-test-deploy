@@ -426,48 +426,91 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ courseId, yearId, sub
         }
     };
 
+    // const handleSubmit = async (e: React.FormEvent) => {
+    //     e.preventDefault();
+
+    //     try {
+    //         if (isEditMode && editQuestionId) {
+    //             await updateQuestionInSubject({
+    //                 courseId,
+    //                 yearId,
+    //                 subjectId,
+    //                 questionId: editQuestionId,
+    //                 questionText,
+    //                 answerText,
+    //                 videoLink,
+    //                 questionImage,
+    //                 answerImage,
+    //                 questiontag, 
+    //             }).unwrap();
+    //             toast.success('Question updated successfully!');
+    //         } else {
+    //             await addQuestionToSubject({
+    //                 courseId,
+    //                 yearId,
+    //                 subjectId,
+    //                 questionText,
+                    
+    //                 answerText,
+    //                 videoLink,
+    //                 questionImage,
+    //                 answerImage,
+    //                 questiontag, 
+    //             }).unwrap();
+    //             toast.success('Question added successfully!');
+    //         }
+    //         refetchQuestions(); // Fetch questions after adding/updating
+    //         setIsFormVisible(false); // Close the modal after submitting
+    //         // Clear input fields after successful submission
+    //         setQuestionText('');
+    //         setAnswerText('');
+    //         setVideoLink('');
+    //         setQuestionImage(null);
+    //         setAnswerImage(null);
+    //         setQuestiontag([]); // Add this line
+    //         setIsEditMode(false);
+    //         setEditQuestionId(null);
+    //     } catch (error) {
+    //         console.error('Error adding/updating question:', error);
+    //         toast.error('Error adding/updating question');
+    //     }
+    // };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         try {
+            const questionData = {
+                courseId,
+                yearId,
+                subjectId,
+                questionText,
+                answerText,
+                videoLink,
+                questionImage,
+                answerImage,
+                questiontag: questiontag.length > 0 ? questiontag : undefined,
+            };
+
             if (isEditMode && editQuestionId) {
                 await updateQuestionInSubject({
-                    courseId,
-                    yearId,
-                    subjectId,
+                    ...questionData,
                     questionId: editQuestionId,
-                    questionText,
-                    answerText,
-                    videoLink,
-                    questionImage,
-                    answerImage,
-                    questiontag, 
                 }).unwrap();
                 toast.success('Question updated successfully!');
             } else {
-                await addQuestionToSubject({
-                    courseId,
-                    yearId,
-                    subjectId,
-                    questionText,
-                    
-                    answerText,
-                    videoLink,
-                    questionImage,
-                    answerImage,
-                    questiontag, 
-                }).unwrap();
+                await addQuestionToSubject(questionData).unwrap();
                 toast.success('Question added successfully!');
             }
-            refetchQuestions(); // Fetch questions after adding/updating
-            setIsFormVisible(false); // Close the modal after submitting
-            // Clear input fields after successful submission
+            refetchQuestions();
+            setIsFormVisible(false);
+            // Clear input fields
             setQuestionText('');
             setAnswerText('');
             setVideoLink('');
             setQuestionImage(null);
             setAnswerImage(null);
-            setQuestiontag([]); // Add this line
+            setQuestiontag([]);
             setIsEditMode(false);
             setEditQuestionId(null);
         } catch (error) {
@@ -475,7 +518,6 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ courseId, yearId, sub
             toast.error('Error adding/updating question');
         }
     };
-
     const toggleFormVisibility = () => {
         setIsFormVisible(!isFormVisible);
     };
@@ -487,7 +529,7 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ courseId, yearId, sub
             setQuestionText(question.questionText);
             setAnswerText(question.answerText);
             setVideoLink(question.videoLink || '');
-            setQuestiontag(question.questiontag || []);
+            setQuestiontag(Array.isArray(question.questiontag) ? question.questiontag : []);
 
             // Check if questionImage and answerImage are available and create File objects if needed
             if (question.questionImage?.url) {
