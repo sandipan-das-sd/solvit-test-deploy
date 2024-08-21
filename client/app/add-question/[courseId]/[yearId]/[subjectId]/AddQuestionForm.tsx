@@ -389,7 +389,7 @@ interface IQuestion {
     };
     videoLink?: string;
     videoId?: string; 
-    questiontag?: any;
+    questiontag?: string[];
    
     order: number;
 }
