@@ -34,7 +34,8 @@ import {
   DislikeQuestion,
   getTotalLikesAndDislikes,
   getUserLikeDislikeDetails,
-  getQuestionLikeDislikeDetails
+  getQuestionLikeDislikeDetails,
+  getAllCoursesPurchase
  
 } from "../controllers/course.controller";
 import { authorizeRoles, isAutheticated } from "../middleware/auth";
@@ -217,5 +218,8 @@ courseRouter.get(
   getQuestionLikeDislikeDetails
 );
 
+
+//purchased course for useers map
+courseRouter.get("/get-all-courses/:userId", isAutheticated,getAllCoursesPurchase);
 
 export default courseRouter;

@@ -18,7 +18,7 @@ import NotificationModel from "../models/notification.Model";
 import axios from "axios";
 import { IYear, IQuestion } from "../models/course.model";
 import { FileArray } from 'express-fileupload';
-
+import OrderModel from "../models/order.Model";
 const extractVideoId = (url: string): string | null => {
   let videoId = null;
   const youtubePatterns = [
@@ -1971,6 +1971,39 @@ export const generateVideoUrl = CatchAsyncError(
       res.json(response.data);
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 400));
+    }
+  }
+);
+export const getAllCoursesPurchase = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userId = req.user?._id;
+      console.log("User ID:", userId); 
+
+      if (!userId) {
+        return next(new ErrorHandler("User not authenticated", 401));
+      }
+
+      // Fetch user's purchased courses
+      const userOrders = await OrderModel.find({ userId: userId });
+      const purchasedCourseIds = userOrders.map(order => order.courseId.toString());
+
+      console.log("Purchased Course IDs:", purchasedCourseIds); // Log purchased course IDs
+
+      // Fetch only the purchased courses
+      const purchasedCourses = await CourseModel.find({
+        _id: { $in: purchasedCourseIds }
+      }).select("-courseData.videoUrl -courseData.suggestion -courseData.questions -courseData.links");
+
+      console.log("Number of purchased courses:", purchasedCourses.length); // Log number of purchased courses
+
+      res.status(200).json({
+        success: true,
+        courses: purchasedCourses,
+      });
+    } catch (error: any) {
+      console.error("Error in getAllCoursesPurchase:", error); // Log any errors
+      return next(new ErrorHandler(error.message, 500));
     }
   }
 );
