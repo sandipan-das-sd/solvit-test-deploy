@@ -1,9 +1,17 @@
+
+
+
+
+
 // import express from "express";
 // import {
 //   addAnwser,
 //   addQuestion,
+//   AddQuestToSubject,
 //   addReplyToReview,
 //   addReview,
+//   AddSubjectToYear,
+//   AddYeartoCourse,
 //   deleteCourse,
 //   editCourse,
 //   generateVideoUrl,
@@ -12,8 +20,26 @@
 //   getCourseByUser,
 //   getSingleCourse,
 //   uploadCourse,
+//   EditYear,
+//   DeleteYear,
+//   EditSubject,
+//   DeleteSubject,
+ 
+//   DeleteQuestion,
+//   UpdateQuestInSubject,
+//   GetYearsOfCourse,
+//   GetAllSubjects,
+//   GetQuestions,
+//   LikeQuestion,
+//   DislikeQuestion,
+//   getTotalLikesAndDislikes,
+//   getUserLikeDislikeDetails,
+//   getQuestionLikeDislikeDetails
+ 
 // } from "../controllers/course.controller";
 // import { authorizeRoles, isAutheticated } from "../middleware/auth";
+
+// import { uploadImage } from "../services/course.service";
 // const courseRouter = express.Router();
 
 // courseRouter.post(
@@ -23,6 +49,104 @@
 //   uploadCourse
 // );
 
+// //add year to course
+// courseRouter.post(
+//   "/course/:courseId/year",
+//   isAutheticated,
+//   authorizeRoles("admin"),
+//   (req, res, next) => {
+//     console.log("Route hit!");
+//     next();
+//   },
+//   AddYeartoCourse);
+
+// //get the year
+  
+
+// courseRouter.get("/course/:courseId/years", isAutheticated, GetYearsOfCourse);
+
+
+// //add subject to year
+// courseRouter.post(
+//   "/course/:courseId/year/:yearId/subject",
+//   isAutheticated,
+//   authorizeRoles("admin"),
+//   AddSubjectToYear)
+
+// //Add question to subject
+// courseRouter.post(
+//   "/course/:courseId/year/:yearId/subject/:subjectId/question",
+//   isAutheticated,
+//   AddQuestToSubject,
+//   uploadImage,
+//   authorizeRoles("admin"),
+// )
+
+// // Update a question
+// courseRouter.put(
+//   "/course/:courseId/year/:yearId/subject/:subjectId/question/:questionId",
+//   isAutheticated,
+//   uploadImage, // Ensure this middleware is only used when you are uploading images
+//   authorizeRoles("admin"),
+// UpdateQuestInSubject
+// );
+
+// // Delete a question
+// courseRouter.delete(
+//   "/course/:courseId/year/:yearId/subject/:subjectId/question/:questionId",
+//   isAutheticated,
+//   authorizeRoles("admin"),
+//   DeleteQuestion
+// );
+// courseRouter.put(
+//   "/course/:courseId/year/:yearId",
+//   isAutheticated,
+//   authorizeRoles("admin"),
+//   EditYear
+// );
+
+// courseRouter.delete(
+//   "/course/:courseId/year/:yearId",
+//   isAutheticated,
+//   authorizeRoles("admin"),
+//   DeleteYear
+// );
+
+// courseRouter.put(
+//   "/course/:courseId/year/:yearId/subject/:subjectId",
+//   isAutheticated,
+//   authorizeRoles("admin"),
+//   EditSubject
+// );
+
+// courseRouter.delete(
+//   "/course/:courseId/year/:yearId/subject/:subjectId",
+//   isAutheticated,
+//   authorizeRoles("admin"),
+//   DeleteSubject
+// );
+
+// courseRouter.get(
+//   "/course/:courseId/year/:yearId/subjects",
+//   isAutheticated,
+  
+//  GetAllSubjects
+// );
+
+// //get question
+// courseRouter.get('/course/:courseId/year/:yearId/subject/:subjectId/questions', isAutheticated,  GetQuestions);
+// //delete question
+// courseRouter.delete(
+//   "/course/:courseId/year/:yearId/subject/:subjectId/question/:questionId",
+//   isAutheticated,
+//   authorizeRoles("admin"),
+//   DeleteQuestion
+// );
+// //reorder question
+
+// // Reorder questions route
+// // courseRouter.patch('/:courseId/years/:yearId/subjects/:subjectId/questions/reorder', QuestionReorder);
+// // //
 // courseRouter.put(
 //   "/edit-course/:id",
 //   isAutheticated,
@@ -30,9 +154,9 @@
 //   editCourse
 // );
 
-// courseRouter.get("/get-course/:id", getSingleCourse);
+// courseRouter.get("/get-course/:id",isAutheticated, getSingleCourse);
 
-// courseRouter.get("/get-courses", getAllCourses);
+// courseRouter.get("/get-courses",isAutheticated, getAllCourses);
 
 // courseRouter.get(
 //   "/get-admin-courses",
@@ -56,8 +180,6 @@
 //   addReplyToReview
 // );
 
-
-
 // courseRouter.post("/getVdoCipherOTP", generateVideoUrl);
 
 // courseRouter.delete(
@@ -66,10 +188,37 @@
 //   authorizeRoles("admin"),
 //   deleteCourse
 // );
+// // Like a question
+// courseRouter.post("/course/:courseId/year/:yearId/subject/:subjectId/question/:questionId/like", isAutheticated, LikeQuestion);
+
+// // Dislike a question
+// courseRouter.post("/course/:courseId/year/:yearId/subject/:subjectId/question/:questionId/dislike", isAutheticated, DislikeQuestion);
+// //get all like and dislike
+
+// courseRouter.get(
+//   "/course/:courseId/likes-dislikes",
+//   isAutheticated,
+//   authorizeRoles("admin"),
+//   getTotalLikesAndDislikes
+// );
+
+// //get like and dislike by user
+// courseRouter.get(
+//   "/user/:userId/likes-dislikes",
+//   isAutheticated,
+//   getUserLikeDislikeDetails
+// );
+
+// //get like dislike count of each questions
+// courseRouter.get(
+//   "/course/:courseId/year/:yearId/subject/:subjectId/question/:questionId/likes-dislikes",
+//   isAutheticated,
+//   authorizeRoles("admin"),
+//   getQuestionLikeDislikeDetails
+// );
+
 
 // export default courseRouter;
-
-
 
 
 
@@ -84,12 +233,14 @@ import {
   AddYeartoCourse,
   deleteCourse,
   editCourse,
+  doubtMeetingLinkSend,
   generateVideoUrl,
   getAdminAllCourses,
   getAllCourses,
   getCourseByUser,
   getSingleCourse,
   uploadCourse,
+  generateDoubt,
   EditYear,
   DeleteYear,
   EditSubject,
@@ -104,7 +255,11 @@ import {
   DislikeQuestion,
   getTotalLikesAndDislikes,
   getUserLikeDislikeDetails,
-  getQuestionLikeDislikeDetails
+  getQuestionLikeDislikeDetails,
+  getDoubts,
+  getAllCoursesPurchase
+  
+ 
  
 } from "../controllers/course.controller";
 import { authorizeRoles, isAutheticated } from "../middleware/auth";
@@ -133,7 +288,8 @@ courseRouter.post(
 //get the year
   
 
-courseRouter.get("/course/:courseId/years", isAutheticated, GetYearsOfCourse);
+courseRouter.get("/course/:courseId/:userId/years", isAutheticated,  GetYearsOfCourse);
+
 
 
 //add subject to year
@@ -196,15 +352,16 @@ courseRouter.delete(
   DeleteSubject
 );
 
+//get all subject 
 courseRouter.get(
-  "/course/:courseId/year/:yearId/subjects",
+  "/course/:courseId/year/:yearId/:userId/subjects",
   isAutheticated,
   
  GetAllSubjects
 );
 
 //get question
-courseRouter.get('/course/:courseId/year/:yearId/subject/:subjectId/questions', isAutheticated,  GetQuestions);
+courseRouter.get('/course/:courseId/year/:yearId/subject/:subjectId/:userId/questions', isAutheticated, GetQuestions);
 //delete question
 courseRouter.delete(
   "/course/:courseId/year/:yearId/subject/:subjectId/question/:questionId",
@@ -224,9 +381,10 @@ courseRouter.put(
   editCourse
 );
 
-courseRouter.get("/get-course/:id",isAutheticated, getSingleCourse);
+courseRouter.get("/get-course/:id", getSingleCourse);
 
-courseRouter.get("/get-courses",isAutheticated, getAllCourses);
+courseRouter.get("/get-courses", getAllCourses);
+courseRouter.get("/get-all-courses/:userId", isAutheticated,getAllCoursesPurchase);
 
 courseRouter.get(
   "/get-admin-courses",
@@ -268,7 +426,7 @@ courseRouter.post("/course/:courseId/year/:yearId/subject/:subjectId/question/:q
 courseRouter.get(
   "/course/:courseId/likes-dislikes",
   isAutheticated,
-  authorizeRoles("admin"),
+  
   getTotalLikesAndDislikes
 );
 
@@ -288,4 +446,18 @@ courseRouter.get(
 );
 
 
+//doubt
+courseRouter.post(
+  "/get-doubt",
+  isAutheticated,
+  generateDoubt
+);
+
+courseRouter.post(
+  "/doubt-meeting/:id",
+  doubtMeetingLinkSend
+);
+
+//get all doubts
+courseRouter.get('/get-doubts/:userId', isAutheticated,getDoubts);
 export default courseRouter;
