@@ -116,7 +116,7 @@ const Footer = (props: Props) => {
             </p>
 
             <p className="text-base text-black dark:text-gray-300 dark:hover:text-white  pb-2">
-              Mail Us: Gyanodawbjee@gmail.com
+              Mail Us: solvitwbjee@gmail.com
             </p>
           </div>
         </div>
