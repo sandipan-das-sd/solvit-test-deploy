@@ -18,8 +18,8 @@ const Page: FC<Props> = (props) => {
   return (
     <>
       <Heading
-        title="SolviT"
-        description="SolviT is a platform for students to learn and get help from teachers"
+        title="Gyanoda"
+        description="Gyanoda is a platform for students to learn and get help from teachers"
         keywords="WBJEE, NEET, Phy..."
       />
       <div>

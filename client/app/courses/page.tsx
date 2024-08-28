@@ -57,8 +57,8 @@
 //           />
 //           <div className="w-[95%] 800px:w-[85%] m-auto min-h-[70vh]">
 //             <Heading
-//               title={"All courses - SolviT"}
-//               description={"SolviT is a programming community."}
+//               title={"All courses - Gyanoda"}
+//               description={"Gyanoda is a programming community."}
 //               keywords={
 //                 "programming community, coding skills, expert insights, collaboration, growth"
 //               }
@@ -176,8 +176,8 @@ const PageContent = () => {
       />
       <div className="w-[95%] 800px:w-[85%] m-auto min-h-[70vh]">
         <Heading
-          title={"All courses - SolviT"}
-          description={"SolviT is a programming community."}
+          title={"All courses - Gyanoda"}
+          description={"Gyanoda is a programming community."}
           keywords={
             "programming community, coding skills, expert insights, collaboration, growth"
           }

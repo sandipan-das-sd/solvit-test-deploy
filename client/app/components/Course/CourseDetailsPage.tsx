@@ -51,9 +51,9 @@
 //       ) : (
 //         <div>
 //           <Heading
-//             title={data?.course?.name + " - Solvit"}
+//             title={data?.course?.name + " - Gyanoda"}
 //             description={
-//               "SolviT is a Learning Platform for all Entrance Aspirents"
+//               "Gyanoda is a Learning Platform for all Entrance Aspirents"
 //             }
 //             keywords={data?.course?.tags}
 //           />
@@ -132,9 +132,9 @@ const CourseDetailsPage = ({ id }: Props) => {
       ) : (
         <div>
           <Heading
-            title={data?.course?.name + ' - Solvit'}
+            title={data?.course?.name + ' - Gyanoda'}
             description={
-              'SolviT is a Learning Platform for all Entrance Aspirents'
+              'Gyanoda is a Learning Platform for all Entrance Aspirents'
             }
             keywords={data?.course?.tags}
           />

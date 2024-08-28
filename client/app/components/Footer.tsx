@@ -116,13 +116,13 @@ const Footer = (props: Props) => {
             </p>
 
             <p className="text-base text-black dark:text-gray-300 dark:hover:text-white  pb-2">
-              Mail Us: solvitwbjee@gmail.com
+              Mail Us: Gyanodawbjee@gmail.com
             </p>
           </div>
         </div>
         <br />
         <p className="text-center text-black dark:text-white">
-          Copyright © 2024 SolviT | All Rights Reserved
+          Copyright © 2024 Gyanoda | All Rights Reserved
         </p>
       </div>
       <br />

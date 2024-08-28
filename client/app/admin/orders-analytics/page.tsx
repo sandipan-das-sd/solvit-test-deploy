@@ -11,8 +11,8 @@ const page = (props: Props) => {
   return (
     <div>
       <Heading
-        title="SolviT - Admin"
-        description="SolviT is a platform for students to learn and get help from teachers"
+        title="Gyanoda - Admin"
+        description="Gyanoda is a platform for students to learn and get help from teachers"
         keywords="Prograaming,MERN,Redux,Machine Learning"
       />
       <div className="flex">

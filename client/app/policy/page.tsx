@@ -15,8 +15,8 @@ const Page = (props: Props) => {
   return (
     <div>
       <Heading
-        title="Policy - SolviT"
-        description="SolviT is a learning management system for helping programmers."
+        title="Policy - Gyanoda"
+        description="Gyanoda is a learning management system for helping programmers."
         keywords="programming,mern"
       />
       <Header

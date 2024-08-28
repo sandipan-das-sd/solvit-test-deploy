@@ -107,7 +107,7 @@ const Policy = (props: Props) => {
             Users cannot log in as educators or third parties or other fake identity or multiple accounts and cannot engage in any business activities using the platform.
           </p>
           <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
-            The SolviT will not call any user and ask for an OTP. Users are advised not to share their personal details with anyone on the platform. That as per the mechanism of software as held by the company the user ID is mapped with the phone number but not the phone. So, if a user loses their phone but still recovers the SIM, they can log in with the same ID. If unable to recover the SIM, the user has to register again.
+            The Gyanoda will not call any user and ask for an OTP. Users are advised not to share their personal details with anyone on the platform. That as per the mechanism of software as held by the company the user ID is mapped with the phone number but not the phone. So, if a user loses their phone but still recovers the SIM, they can log in with the same ID. If unable to recover the SIM, the user has to register again.
           </p>
           <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
             That the user once creates the website cannot share his or her ID with any other users. If found otherwise, legal action will be taken. That all information, content, material, trademarks, services marks, trade names, and trade secrets including but not limited to the software, text, images, graphics, video, script and audio, contained in the Application, Website, Services and products are proprietary property of the Company (“Proprietary Information”). That if any user or otherwise is found monetizing upon the contents and materials within the Website then the same shall be held punishable under the breach of contract vide Indian Contract Act,1872 and relevant criminal provisions shall apply.
@@ -140,10 +140,10 @@ const Policy = (props: Props) => {
         </p>
           <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
             <strong>EDUCATOR TERMS & CONDITIONS:</strong><br />
-            Once the educator enters into the agreement with the SolviT then they are bound by the rules and agreement as made between the parties. That the educational material prepared in any medium/by script or by video is and shall be made by the educator upon consent and acceptance with the terms as laid by SolviT. Once educator uploads their content to our platform, then the SolviT team has the right to use that video for any future reference. That all videos and materials curated and created are as per the remuneration paid to educator to conclusively shoot and send the videos to the SolviT. That educator shall be bound the provisions of Copyright Act,1872 and the relevant amendment provisions.
+            Once the educator enters into the agreement with the Gyanoda then they are bound by the rules and agreement as made between the parties. That the educational material prepared in any medium/by script or by video is and shall be made by the educator upon consent and acceptance with the terms as laid by Gyanoda. Once educator uploads their content to our platform, then the Gyanoda team has the right to use that video for any future reference. That all videos and materials curated and created are as per the remuneration paid to educator to conclusively shoot and send the videos to the Gyanoda. That educator shall be bound the provisions of Copyright Act,1872 and the relevant amendment provisions.
           </p>
           <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
-            The SolviT being the sole owner and proprietor of the contents shall have the absolute right to remove or delete videos of educators if the content is not relevant or good.
+            The Gyanoda being the sole owner and proprietor of the contents shall have the absolute right to remove or delete videos of educators if the content is not relevant or good.
           </p>
           <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
             The Educators shall be bound to share their original videos; they cannot copy content from other websites, for example, using content from platforms like &quot;XYZ Learning/Academy/Platform or any app.&quot;
@@ -153,10 +153,10 @@ const Policy = (props: Props) => {
             That the Educators cannot use any rough language/abusive language/behaviour dressing sense or engage in inappropriate behaviour with the users/ students while clearing doubts.
           </p>
           <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
-            Educators and the SolviT team will mutually decide on the pricing for the content. Educators cannot charge exorbitant prices from users. They shall be bound by the monetary aspects as per the agreement.
+            Educators and the Gyanoda team will mutually decide on the pricing for the content. Educators cannot charge exorbitant prices from users. They shall be bound by the monetary aspects as per the agreement.
           </p>
           <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
-            If any educators want to upload their content, they have to request it first in the app. If the request is accepted by the SolviT, then they can upload content. All relevant instructions will be sent by the SolviT itself.
+            If any educators want to upload their content, they have to request it first in the app. If the request is accepted by the Gyanoda, then they can upload content. All relevant instructions will be sent by the Gyanoda itself.
           </p>
           <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
             That the educators cannot engage in business using our domain and server, reveal any relevant security data, or engage in any business activities that involve the platform. That the users cannot be engaged to any private tuition or education through one-to-one source which is violative of the contract and the same if found shall be punishable as breach of contract. Educators cannot log in as users and cannot sell courses intended for user use or make any miscreance use of the same.
@@ -171,11 +171,11 @@ const Policy = (props: Props) => {
           <strong> Refund and Cancellation Policy:</strong><br />
           </p>
           <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
-          At SolviT, we strive to provide high-quality educational content and services. However, we understand that there may be instances where a refund is warranted.
+          At Gyanoda, we strive to provide high-quality educational content and services. However, we understand that there may be instances where a refund is warranted.
         </p>
         <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
           <strong>Refund Eligibility:</strong><br />
-          Refunds may be considered on a case-by-case basis within 7 days of purchase if the course or service does not meet the described standards or if technical issues prevent access to the content.
+          Refunds may be considered on a case-by-case basis within 7 days of purchase if technical issues prevent access to the content.
         </p>
         <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
           <strong>Refund Process:</strong><br />
@@ -194,22 +194,14 @@ const Policy = (props: Props) => {
          
         </p>
         <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
-          SolviT primarily provides digital educational content and services. As such, most of our products are delivered digitally and do not require physical shipping.
+          Gyanoda primarily provides digital educational content and services. As such, most of our products are delivered digitally and do not require physical shipping.
         </p>
         <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
           <strong>Digital Product Delivery:</strong><br />
           Upon successful payment, you will receive immediate access to your purchased digital content through your account on our platform.
         </p>
-        <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
-          <strong>Physical Products (if applicable):</strong><br />
-          In the event that we offer any physical products, shipping will be handled as follows:
-          - Order processing time: 1-2 business days
-          - Estimated delivery time within India: 3-7 business days
-          - International shipping (if available): 7-14 business days
-        </p>
-        <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
-          Please note that these are estimated timeframes and actual delivery times may vary depending on your location and other factors.
-        </p>
+        
+        
         <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
           <strong>Contact Us:</strong><br />
           </p>

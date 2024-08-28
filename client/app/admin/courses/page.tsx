@@ -13,8 +13,8 @@
 //     <div>
 //       <AdminProtected>
 //         <Heading
-//           title="SolviT - Admin"
-//           description="SolviT is a platform for students to learn and get help from teachers"
+//           title="Gyanoda - Admin"
+//           description="Gyanoda is a platform for students to learn and get help from teachers"
 //           keywords="Programming,MERN,Redux,Machine Learning"
 //         />
 //         <div className="flex h-screen">
@@ -48,8 +48,8 @@ const Page = (props: Props) => {
     <AdminProtected>
       <Suspense fallback={<div>Loading...</div>}>
         <Heading
-          title="SolviT - Admin"
-          description="SolviT is a platform for students to learn and get help from teachers"
+          title="Gyanoda - Admin"
+          description="Gyanoda is a platform for students to learn and get help from teachers"
           keywords="Programming,MERN,Redux,Machine Learning"
         />
         <div className="flex h-screen">

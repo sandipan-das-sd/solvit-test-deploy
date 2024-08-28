@@ -1,6 +1,6 @@
-# SolviTApp
+# GyanodaApp
 check1
 check sandipan
- is me connected?# Solvit-Sandipan
+ is me connected?# Gyanoda-Sandipan
 Soumadip here?//
 ok connected?@@
