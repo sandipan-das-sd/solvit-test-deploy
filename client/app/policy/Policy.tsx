@@ -119,6 +119,26 @@ const Policy = (props: Props) => {
             You may own the medium on which the information, content or materials resides, but the Company shall at all times retain full and complete title to the information, content or materials and all intellectual property rights inserted by the Company on such medium and shall be as a binding contract. Certain contents on the Website may belong to third parties. Such contents have been reproduced after taking prior consent from said party and all rights relating to such content will remain with such third party. Further, you recognize and acknowledge that the ownership of all trademarks, copyright, logos, service marks and other intellectual property owned by any third party or of the Company shall continue to vest with such party and You are not permitted to use the same without the consent of the respective Company.
           </p>
           <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
+          <strong>Information We Collect:</strong><br />
+          We collect information you provide directly to us, such as when you create an account, use our services, or contact us for support. This may include your name, email address, phone number, and payment information.
+        </p>
+        <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
+          <strong>How We Use Your Information:</strong><br />
+          We use your information to provide, maintain, and improve our services, process transactions, send you technical notices and support messages, and respond to your comments and questions.
+        </p>
+        <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
+          <strong>Data Security:</strong><br />
+          We implement appropriate technical and organizational measures to protect your personal information against unauthorized or unlawful processing, accidental loss, destruction, or damage.
+        </p>
+        <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
+          <strong>Your Rights:</strong><br />
+          You have the right to access, correct, or delete your personal information. If you wish to exercise these rights, please contact us using the information provided in our Contact Us section.
+        </p>
+        <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
+          <strong>Changes to This Policy:</strong><br />
+          We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page.
+        </p>
+          <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
             <strong>EDUCATOR TERMS & CONDITIONS:</strong><br />
             Once the educator enters into the agreement with the SolviT then they are bound by the rules and agreement as made between the parties. That the educational material prepared in any medium/by script or by video is and shall be made by the educator upon consent and acceptance with the terms as laid by SolviT. Once educator uploads their content to our platform, then the SolviT team has the right to use that video for any future reference. That all videos and materials curated and created are as per the remuneration paid to educator to conclusively shoot and send the videos to the SolviT. That educator shall be bound the provisions of Copyright Act,1872 and the relevant amendment provisions.
           </p>
@@ -147,6 +167,71 @@ const Policy = (props: Props) => {
           <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
             The limitations and exclusions in this section apply to the maximum extent permitted by applicable law.
           </p>
+          <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
+          <strong> Refund and Cancellation Policy:</strong><br />
+          </p>
+          <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
+          At SolviT, we strive to provide high-quality educational content and services. However, we understand that there may be instances where a refund is warranted.
+        </p>
+        <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
+          <strong>Refund Eligibility:</strong><br />
+          Refunds may be considered on a case-by-case basis within 7 days of purchase if the course or service does not meet the described standards or if technical issues prevent access to the content.
+        </p>
+        <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
+          <strong>Refund Process:</strong><br />
+          To request a refund, please contact our support team with your order details and reason for the refund. We will review your request and respond within 3 business days.
+        </p>
+        <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
+          <strong>Refund Timeline:</strong><br />
+          If a refund is approved, it will be processed within 5-7 working days. The refund will be credited back to the original payment method used for the purchase.
+        </p>
+        <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
+            <strong>Cancellations:</strong><br />
+            We do not currently offer cancellations for our services. All purchases are final and non-refundable unless otherwise stated in our refund policy above. Please carefully review the service details before making a purchase.
+          </p>
+        <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
+          <strong>Shipping Policy:</strong><br />
+         
+        </p>
+        <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
+          SolviT primarily provides digital educational content and services. As such, most of our products are delivered digitally and do not require physical shipping.
+        </p>
+        <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
+          <strong>Digital Product Delivery:</strong><br />
+          Upon successful payment, you will receive immediate access to your purchased digital content through your account on our platform.
+        </p>
+        <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
+          <strong>Physical Products (if applicable):</strong><br />
+          In the event that we offer any physical products, shipping will be handled as follows:
+          - Order processing time: 1-2 business days
+          - Estimated delivery time within India: 3-7 business days
+          - International shipping (if available): 7-14 business days
+        </p>
+        <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
+          Please note that these are estimated timeframes and actual delivery times may vary depending on your location and other factors.
+        </p>
+        <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
+          <strong>Contact Us:</strong><br />
+          </p>
+          <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
+          We&apos; here to help! If you have any questions, concerns, or feedback, please Don&apos;t hesitate to reach out to us using the following contact information:
+        </p>
+        <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
+          <strong>Email:</strong> solvitwbjee@gmail.com
+        </p>
+        <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
+          <strong>Phone:</strong> +91 833 501 9404
+        </p>
+        <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
+          <strong>Operating Hours:</strong> Monday to Friday, 9:00 AM to 6:00 PM IST
+        </p>
+        <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
+          <strong>Address:</strong><br />
+          StudyBloom 24<br />
+          218 Basudevpur Roas<br />
+          Saratpally Shyamnagar, North 24 PGS 743127<br />
+          West Bengal, India
+        </p>
         </ul>
       </div>
     </div>
