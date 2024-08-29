@@ -99,7 +99,7 @@ const About = () => {
           At Gyanoda, we believe that quality education and exam preparation should be accessible to all. Our platform is designed to provide you with the tools, knowledge, and support you need to succeed in your competitive exams.
           <br />
           <br />
-          Join the Gyanoda community today and take the first step towards achieving your academic and career goals. With our comprehensive resources and dedicated support, you'll be well-equipped to face any competitive exam with confidence.
+          Join the Gyanoda community today and take the first step towards achieving your academic and career goals. With our comprehensive resources and dedicated support, you will be well-equipped to face any competitive exam with confidence.
         </p>
         <br />
         <span className="text-[22px]">Ratna Bhattacharya</span>
