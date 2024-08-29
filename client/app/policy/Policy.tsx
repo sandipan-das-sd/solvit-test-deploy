@@ -200,7 +200,36 @@ const Policy = (props: Props) => {
           <strong>Digital Product Delivery:</strong><br />
           Upon successful payment, you will receive immediate access to your purchased digital content through your account on our platform.
         </p>
-        
+        <h2 className={`${styles.title} !text-start pt-6`}>
+            Privacy Policy
+          </h2>
+          <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
+            At Sandipan Das (Officially Gyanoda will release Soon), we are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy explains how we collect, use, and safeguard your data when you use our services.
+          </p>
+          <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
+            <strong>Information We Collect:</strong><br />
+            We collect information you provide directly to us, such as when you create an account, use our services, or contact us for support. This may include your name, email address, phone number, and payment information.
+          </p>
+          <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
+            <strong>How We Use Your Information:</strong><br />
+            We use your information to provide, maintain, and improve our services, process transactions, send you technical notices and support messages, and respond to your comments and questions.
+          </p>
+          <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
+            <strong>Data Security:</strong><br />
+            We implement appropriate technical and organizational measures to protect your personal information against unauthorized or unlawful processing, accidental loss, destruction, or damage.
+          </p>
+          <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
+            <strong>Your Rights:</strong><br />
+            You have the right to access, correct, or delete your personal information. If you wish to exercise these rights, please contact us using the information provided in our Contact Us section.
+          </p>
+          <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
+            <strong>Changes to This Policy:</strong><br />
+            We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page.
+          </p>
+          <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
+            For more detailed information about our privacy practices, please refer to our full Privacy Policy document.
+          </p>
+          
         
         <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line">
           <strong>Contact Us:</strong><br />
