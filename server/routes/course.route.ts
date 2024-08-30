@@ -1,6 +1,3 @@
-
-
-
 import express from "express";
 import {
   addAnwser,
@@ -24,7 +21,6 @@ import {
   DeleteYear,
   EditSubject,
   DeleteSubject,
- 
   DeleteQuestion,
   UpdateQuestInSubject,
   GetYearsOfCourse,
@@ -36,10 +32,8 @@ import {
   getUserLikeDislikeDetails,
   getQuestionLikeDislikeDetails,
   getDoubts,
-  getAllCoursesPurchase
-  
- 
- 
+  getAllCoursesPurchase,
+  UnlikeQuestion,
 } from "../controllers/course.controller";
 import { authorizeRoles, isAutheticated } from "../middleware/auth";
 
@@ -62,21 +56,20 @@ courseRouter.post(
     console.log("Route hit!");
     next();
   },
-  AddYeartoCourse);
+  AddYeartoCourse
+);
 
 //get the year
-  
 
-courseRouter.get("/course/:courseId/years", isAutheticated,  GetYearsOfCourse);
-
-
+courseRouter.get("/course/:courseId/years", isAutheticated, GetYearsOfCourse);
 
 //add subject to year
 courseRouter.post(
   "/course/:courseId/year/:yearId/subject",
   isAutheticated,
   authorizeRoles("admin"),
-  AddSubjectToYear)
+  AddSubjectToYear
+);
 
 //Add question to subject
 courseRouter.post(
@@ -84,8 +77,8 @@ courseRouter.post(
   isAutheticated,
   AddQuestToSubject,
   uploadImage,
-  authorizeRoles("admin"),
-)
+  authorizeRoles("admin")
+);
 
 // Update a question
 courseRouter.put(
@@ -93,7 +86,7 @@ courseRouter.put(
   isAutheticated,
   uploadImage, // Ensure this middleware is only used when you are uploading images
   authorizeRoles("admin"),
-UpdateQuestInSubject
+  UpdateQuestInSubject
 );
 
 // Delete a question
@@ -131,16 +124,20 @@ courseRouter.delete(
   DeleteSubject
 );
 
-//get all subject 
+//get all subject
 courseRouter.get(
   "/course/:courseId/year/:yearId/subjects",
   isAutheticated,
-  
- GetAllSubjects
+
+  GetAllSubjects
 );
 
 //get question
-courseRouter.get('/course/:courseId/year/:yearId/subject/:subjectId/questions', isAutheticated, GetQuestions);
+courseRouter.get(
+  "/course/:courseId/year/:yearId/subject/:subjectId/questions",
+  isAutheticated,
+  GetQuestions
+);
 //delete question
 courseRouter.delete(
   "/course/:courseId/year/:yearId/subject/:subjectId/question/:questionId",
@@ -163,7 +160,11 @@ courseRouter.put(
 courseRouter.get("/get-course/:id", getSingleCourse);
 
 courseRouter.get("/get-courses", getAllCourses);
-courseRouter.get("/get-all-courses/:userId", isAutheticated,getAllCoursesPurchase);
+courseRouter.get(
+  "/get-all-courses/:userId",
+  isAutheticated,
+  getAllCoursesPurchase
+);
 
 courseRouter.get(
   "/get-admin-courses",
@@ -196,16 +197,31 @@ courseRouter.delete(
   deleteCourse
 );
 // Like a question
-courseRouter.post("/course/:courseId/year/:yearId/subject/:subjectId/question/:questionId/like", isAutheticated, LikeQuestion);
+courseRouter.post(
+  "/course/:courseId/year/:yearId/subject/:subjectId/question/:questionId/like",
+  isAutheticated,
+  LikeQuestion
+);
 
 // Dislike a question
-courseRouter.post("/course/:courseId/year/:yearId/subject/:subjectId/question/:questionId/dislike", isAutheticated, DislikeQuestion);
+courseRouter.post(
+  "/course/:courseId/year/:yearId/subject/:subjectId/question/:questionId/dislike",
+  isAutheticated,
+  DislikeQuestion
+);
+// unlike a question
+
+courseRouter.post(
+  "/course/:courseId/year/:yearId/subject/:subjectId/question/:questionId/unlike",
+  isAutheticated,
+  UnlikeQuestion
+);
 //get all like and dislike
 
 courseRouter.get(
   "/course/:courseId/likes-dislikes",
   isAutheticated,
-  
+
   getTotalLikesAndDislikes
 );
 
@@ -224,19 +240,11 @@ courseRouter.get(
   getQuestionLikeDislikeDetails
 );
 
-
 //doubt
-courseRouter.post(
-  "/get-doubt",
-  isAutheticated,
-  generateDoubt
-);
+courseRouter.post("/get-doubt", isAutheticated, generateDoubt);
 
-courseRouter.post(
-  "/doubt-meeting/:id",
-  doubtMeetingLinkSend
-);
+courseRouter.post("/doubt-meeting/:id", doubtMeetingLinkSend);
 
 //get all doubts
-courseRouter.get('/get-doubts/:userId', isAutheticated,getDoubts);
+courseRouter.get("/get-doubts/:userId", isAutheticated, getDoubts);
 export default courseRouter;
