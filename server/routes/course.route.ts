@@ -1,8 +1,6 @@
 
 
 
-
-
 import express from "express";
 import {
   addAnwser,
@@ -14,12 +12,14 @@ import {
   AddYeartoCourse,
   deleteCourse,
   editCourse,
+  doubtMeetingLinkSend,
   generateVideoUrl,
   getAdminAllCourses,
   getAllCourses,
   getCourseByUser,
   getSingleCourse,
   uploadCourse,
+  generateDoubt,
   EditYear,
   DeleteYear,
   EditSubject,
@@ -35,7 +35,10 @@ import {
   getTotalLikesAndDislikes,
   getUserLikeDislikeDetails,
   getQuestionLikeDislikeDetails,
+  getDoubts,
   getAllCoursesPurchase
+  
+ 
  
 } from "../controllers/course.controller";
 import { authorizeRoles, isAutheticated } from "../middleware/auth";
@@ -64,7 +67,8 @@ courseRouter.post(
 //get the year
   
 
-courseRouter.get("/course/:courseId/years", isAutheticated, GetYearsOfCourse);
+courseRouter.get("/course/:courseId/years", isAutheticated,  GetYearsOfCourse);
+
 
 
 //add subject to year
@@ -127,6 +131,7 @@ courseRouter.delete(
   DeleteSubject
 );
 
+//get all subject 
 courseRouter.get(
   "/course/:courseId/year/:yearId/subjects",
   isAutheticated,
@@ -135,7 +140,7 @@ courseRouter.get(
 );
 
 //get question
-courseRouter.get('/course/:courseId/year/:yearId/subject/:subjectId/questions', isAutheticated,  GetQuestions);
+courseRouter.get('/course/:courseId/year/:yearId/subject/:subjectId/questions', isAutheticated, GetQuestions);
 //delete question
 courseRouter.delete(
   "/course/:courseId/year/:yearId/subject/:subjectId/question/:questionId",
@@ -155,9 +160,10 @@ courseRouter.put(
   editCourse
 );
 
-courseRouter.get("/get-course/:id",isAutheticated, getSingleCourse);
+courseRouter.get("/get-course/:id", getSingleCourse);
 
-courseRouter.get("/get-courses",isAutheticated, getAllCourses);
+courseRouter.get("/get-courses", getAllCourses);
+courseRouter.get("/get-all-courses/:userId", isAutheticated,getAllCoursesPurchase);
 
 courseRouter.get(
   "/get-admin-courses",
@@ -199,7 +205,7 @@ courseRouter.post("/course/:courseId/year/:yearId/subject/:subjectId/question/:q
 courseRouter.get(
   "/course/:courseId/likes-dislikes",
   isAutheticated,
-  authorizeRoles("admin"),
+  
   getTotalLikesAndDislikes
 );
 
@@ -219,7 +225,18 @@ courseRouter.get(
 );
 
 
-//purchased course for useers map
-courseRouter.get("/get-all-courses/:userId", isAutheticated,getAllCoursesPurchase);
+//doubt
+courseRouter.post(
+  "/get-doubt",
+  isAutheticated,
+  generateDoubt
+);
 
+courseRouter.post(
+  "/doubt-meeting/:id",
+  doubtMeetingLinkSend
+);
+
+//get all doubts
+courseRouter.get('/get-doubts/:userId', isAutheticated,getDoubts);
 export default courseRouter;

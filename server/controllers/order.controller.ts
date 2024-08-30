@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { CatchAsyncError } from "../middleware/catchAsyncErrors";
 import ErrorHandler from "../utils/ErrorHandler";
-import OrderModel, { IOrder } from "../models/order.Model";
+import OrderModel,{IOrder} from "../models/order.Model";
 import userModel from "../models/user.model";
 import CourseModel from "../models/course.model";
 import Razorpay from 'razorpay';
@@ -83,7 +83,7 @@ export const verifyPayment = CatchAsyncError(
       const shasum = crypto.createHmac('sha256', secret);
       shasum.update(`${razorpay_order_id}|${razorpay_payment_id}`);
       const digest = shasum.digest('hex');
-
+      
       console.log('Generated digest:', digest);
       console.log('Received signature:', razorpay_signature);
 

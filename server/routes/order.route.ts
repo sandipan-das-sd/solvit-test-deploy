@@ -10,14 +10,14 @@ import {
 const orderRouter = express.Router();
 
 orderRouter.post("/create-order", isAutheticated, createOrder);
-orderRouter.post('/validate', isAutheticated, verifyPayment)
+orderRouter.post('/validate',isAutheticated,verifyPayment)
 orderRouter.get(
   "/get-orders",
   isAutheticated,
   authorizeRoles("admin"),
   getAllOrders
 );
-orderRouter.get("/transaction/user/:userId", isAutheticated, getUserTransactionHistory)
+orderRouter.get("/transaction/user/:userId",isAutheticated,getUserTransactionHistory)
 
 
 export default orderRouter;
