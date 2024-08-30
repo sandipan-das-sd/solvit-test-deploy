@@ -40,7 +40,7 @@ notificationRoute.get(
 notificationRoute.get(
   '/all-notifications',
   isAutheticated,
-  authorizeRoles('admin'),
+
   getAllNotifications
 );
 
