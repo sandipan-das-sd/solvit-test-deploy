@@ -1416,7 +1416,71 @@ export const postResetPassword = CatchAsyncError(
     });
   }
 );
+interface UpdateProfileData {
+  name?: string;
+  email?: string;
+  phone?: string;
+  location?: string;
+}
 
+export const getUserProfileAndUpdate = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userId = req.params.userId;
+
+      if (!userId) {
+        return next(new ErrorHandler("User ID not found", 400));
+      }
+
+      // Clear the user data from Redis cache
+      await redis.del(userId);
+
+      // Fetch fresh data from the database
+      let user = await userModel.findById(userId).select("-password");
+
+      if (!user) {
+        return next(new ErrorHandler("User not found", 404));
+      }
+
+      // Check if there's any data to update
+      const updateData: UpdateProfileData = {};
+      if (req.body.name) updateData.name = req.body.name;
+      if (req.body.email) updateData.email = req.body.email;
+      if (req.body.phone) updateData.phone = req.body.phone;
+      if (req.body.location) updateData.location = req.body.location;
+
+      // If there's data to update, update the user
+      if (Object.keys(updateData).length > 0) {
+        user = await userModel.findByIdAndUpdate(
+          userId,
+          { $set: updateData },
+          { new: true, runValidators: true }
+        ).select("-password");
+
+        if (!user) {
+          return next(new ErrorHandler("User update failed", 400));
+        }
+      }
+
+      // Update Redis cache with fresh data
+      await redis.set(userId, JSON.stringify(user), "EX", 604800); // 7 days
+
+      // Ensure all fields are included in the response, even if they're null or undefined
+      res.status(200).json({
+        success: true,
+        user: {
+          name: user.name || null,
+          email: user.email || null,
+          phone: user.phone || null,
+          location: user.location || null,
+        },
+      });
+    } catch (error: any) {
+      console.error('Error:', error);
+      return next(new ErrorHandler(error.message, 400));
+    }
+  }
+);
 //forget -password
 export const forgetPassword = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {

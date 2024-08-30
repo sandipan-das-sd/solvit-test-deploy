@@ -16,7 +16,8 @@ import {
   resendOtp,
   forgetPassword,
   postResetPassword,
-  getResetPassword
+  getResetPassword,
+  getUserProfileAndUpdate
   
 } from "../controllers/user.controller";
 import { authorizeRoles, isAutheticated } from "../middleware/auth";
@@ -29,7 +30,8 @@ userRouter.post("/activate-user", activateUser);
 userRouter.post("/login", loginUser);
 
 userRouter.get("/logout", isAutheticated, logoutUser);
-
+userRouter.get('/get-info-update/:userId',isAutheticated,getUserProfileAndUpdate)
+userRouter.put('/get-info-update/:userId',isAutheticated,getUserProfileAndUpdate)
 
 
 //Resend OTP for activate Account
