@@ -39,7 +39,7 @@ import { authorizeRoles, isAutheticated } from "../middleware/auth";
 
 import { uploadImage } from "../services/course.service";
 const courseRouter = express.Router();
-
+courseRouter.get("/get-all-courses/:userId", isAutheticated,getAllCoursesPurchase);
 courseRouter.post(
   "/create-course",
   isAutheticated,
