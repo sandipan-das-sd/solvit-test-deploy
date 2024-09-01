@@ -534,7 +534,7 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ courseId, yearId, sub
             formData.append('questionText', questionText);
             formData.append('answerText', answerText);
             formData.append('videoLink', videoLink);
-            formData.append('questiontag', JSON.stringify(questiontag));
+            formData.append('questiontag', JSON.stringify(questiontag)); 
             if (questionImage) formData.append('questionImage', questionImage);
             if (answerImage) formData.append('answerImage', answerImage);
 
@@ -616,12 +616,16 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ courseId, yearId, sub
         }
     };
 
+    // const handleQuestiontagChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     const tagsInput = e.target.value;
+    //     const tagsArray = tagsInput.split(',').map(tag => tag.trim()).filter(tag => tag !== '');
+    //     setQuestiontag(tagsArray);
+    // };
     const handleQuestiontagChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const tagsInput = e.target.value;
         const tagsArray = tagsInput.split(',').map(tag => tag.trim()).filter(tag => tag !== '');
         setQuestiontag(tagsArray);
-    };
- 
+      };
     const handleDeleteQuestion = async (questionId: string) => {
         try {
             await deleteQuestion({

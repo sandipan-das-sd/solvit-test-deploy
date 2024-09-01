@@ -98,7 +98,7 @@ const questionSchema = new Schema<IQuestion>({
     public_id: { type: String },
   },
   videoLink: { type: String },
-  questiontag: { type: String },
+  questiontag: { type: [String], default: [] }, 
   likes: { type: Number, default: 0 },
   dislikes: { type: Number, default: 0 },
   likedBy: [{ type: Schema.Types.ObjectId, ref: "User" }],
