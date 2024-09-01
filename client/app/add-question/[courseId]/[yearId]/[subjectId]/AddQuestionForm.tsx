@@ -419,6 +419,8 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ courseId, yearId, sub
     const [updateQuestionInSubject, { isLoading: isUpdating }] = useUpdateQuestionInSubjectMutation();
     const [deleteQuestion, { isLoading: isDeleting }] = useDeleteQuestionMutation();
     const [questiontag, setQuestiontag] = useState<string[]>([]);   
+    const [tagInput, setTagInput] = useState('');
+
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>, setImage: React.Dispatch<React.SetStateAction<File | null>>) => {
         const file = e.target.files?.[0];
         if (file) {
@@ -565,6 +567,7 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ courseId, yearId, sub
             setQuestionImage(null);
             setAnswerImage(null);
             setQuestiontag([]);
+            setTagInput(''); //new
             setIsEditMode(false);
             setEditQuestionId(null);
         } catch (error) {
@@ -584,6 +587,7 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ courseId, yearId, sub
             setAnswerText(question.answerText);
             setVideoLink(question.videoLink || '');
             setQuestiontag(question.questiontag || []);
+            setTagInput('');
             // Check if questionImage and answerImage are available and create File objects if needed
             if (question.questionImage?.url) {
                 fetch(question.questionImage.url)
@@ -640,6 +644,32 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ courseId, yearId, sub
             console.error('Error deleting question:', error);
             toast.error('Error deleting question');
         }
+    };
+
+
+    //new
+
+    const handleTagInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setTagInput(e.target.value);
+    };
+    
+    const handleTagInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter' || e.key === ',') {
+            e.preventDefault();
+            addTag();
+        }
+    };
+    
+    const addTag = () => {
+        const trimmedInput = tagInput.trim();
+        if (trimmedInput && !questiontag.includes(trimmedInput)) {
+            setQuestiontag([...questiontag, trimmedInput]);
+            setTagInput('');
+        }
+    };
+    
+    const removeTag = (tagToRemove: string) => {
+        setQuestiontag(questiontag.filter(tag => tag !== tagToRemove));
     };
 
     const handleInsertUp = (index: number) => {
@@ -792,7 +822,7 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ courseId, yearId, sub
                                 className="mt-1 block w-full border border-gray-300 rounded p-2"
                             />
                         </div>
-                        <div>
+                        {/* <div>
                             <label className="block text-sm font-medium text-gray-700">Question Tags (comma-separated)</label>
                             <input
                                 type="text"
@@ -801,7 +831,28 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ courseId, yearId, sub
                                 className="mt-1 block w-full border border-gray-300 rounded p-2"
                                 placeholder="e.g. math, algebra, equations"
                             />
-                        </div>
+                        </div> */}
+                        <div className="mb-4">
+    <label className="block text-sm font-medium text-gray-700">Question Tags</label>
+    <div className="flex flex-wrap gap-2 mb-2">
+        {questiontag.map((tag, index) => (
+            <span key={index} className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded flex items-center">
+                {tag}
+                <button type="button" onClick={() => removeTag(tag)} className="ml-1 text-blue-600 hover:text-blue-800">
+                    &times;
+                </button>
+            </span>
+        ))}
+    </div>
+    <input
+        type="text"
+        value={tagInput}
+        onChange={handleTagInputChange}
+        onKeyDown={handleTagInputKeyDown}
+        className="mt-1 block w-full border border-gray-300 rounded p-2"
+        placeholder="Type a tag and press Enter or comma to add"
+    />
+</div>
 
 
                         <button
