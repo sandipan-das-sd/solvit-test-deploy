@@ -36,7 +36,7 @@ app.use(fileUpload({
 }));
 app.use(
     cors({
-        origin: ["https://solvit-test-deploy.vercel.app","https://solvit-client.vercel.app","http://localhost:3000","http://localhost:8081"],
+        origin: ["https://solvit-test-deploy.vercel.app","https://solvit-client.vercel.app","http://localhost:3000","http://localhost:8081","https://gyanoda.com"],
         methods: ['GET', 'POST', 'PUT', 'DELETE','PATCH'],
         allowedHeaders: ['Content-Type', 'Authorization', 'access-token'],
         credentials: true,
