@@ -104,7 +104,7 @@
 //         if (question) {
 //             setQuestionText(question.questionText);
 //             setAnswerText(question.answerText);
-            
+
 //             setVideoLink(question.videoLink);
 //             setQuestionType(question.questionImage ? 'image' : 'text');
 //             setAnswerType(question.answerImage ? 'image' : 'text');
@@ -388,9 +388,9 @@ interface IQuestion {
         public_id: string;
     };
     videoLink?: string;
-    videoId?: string; 
+    videoId?: string;
     questiontag?: string[];
-   
+
     order: number;
 }
 
@@ -409,6 +409,7 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ courseId, yearId, sub
     const [isFormVisible, setIsFormVisible] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
     const [editQuestionId, setEditQuestionId] = useState<string | null>(null);
+    const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
 
     const [addQuestionToSubject, { isLoading: isAdding }] = useAddQuestionToSubjectMutation();
     const { data: questionsData, refetch: refetchQuestions, isFetching: isFetchingQuestions } = useGetQuestionsToSubjectQuery({
@@ -418,7 +419,7 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ courseId, yearId, sub
     });
     const [updateQuestionInSubject, { isLoading: isUpdating }] = useUpdateQuestionInSubjectMutation();
     const [deleteQuestion, { isLoading: isDeleting }] = useDeleteQuestionMutation();
-    const [questiontag, setQuestiontag] = useState<string[]>([]);   
+    const [questiontag, setQuestiontag] = useState<string[]>([]);
     const [tagInput, setTagInput] = useState('');
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>, setImage: React.Dispatch<React.SetStateAction<File | null>>) => {
@@ -452,7 +453,7 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ courseId, yearId, sub
     //                 yearId,
     //                 subjectId,
     //                 questionText,
-                    
+
     //                 answerText,
     //                 videoLink,
     //                 questionImage,
@@ -536,7 +537,7 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ courseId, yearId, sub
             formData.append('questionText', questionText);
             formData.append('answerText', answerText);
             formData.append('videoLink', videoLink);
-            formData.append('questiontag', JSON.stringify(questiontag)); 
+            formData.append('questiontag', JSON.stringify(questiontag));
             if (questionImage) formData.append('questionImage', questionImage);
             if (answerImage) formData.append('answerImage', answerImage);
 
@@ -579,7 +580,7 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ courseId, yearId, sub
         setIsFormVisible(!isFormVisible);
     };
 
-    
+
     const handleEditQuestion = (questionId: string) => {
         const question = questionsData?.questions.find((q: IQuestion) => q._id.toString() === questionId);
         if (question) {
@@ -629,37 +630,56 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ courseId, yearId, sub
         const tagsInput = e.target.value;
         const tagsArray = tagsInput.split(',').map(tag => tag.trim()).filter(tag => tag !== '');
         setQuestiontag(tagsArray);
-      };
+    };
+    // const handleDeleteQuestion = async (questionId: string) => {
+    //     try {
+    //         await deleteQuestion({
+    //             courseId,
+    //             yearId,
+    //             subjectId,
+    //             questionId,
+    //         }).unwrap();
+    //         toast.success('Question deleted successfully!');
+    //         refetchQuestions(); // Fetch questions after deleting
+    //     } catch (error) {
+    //         console.error('Error deleting question:', error);
+    //         toast.error('Error deleting question');
+    //     }
+    // };
     const handleDeleteQuestion = async (questionId: string) => {
-        try {
-            await deleteQuestion({
-                courseId,
-                yearId,
-                subjectId,
-                questionId,
-            }).unwrap();
-            toast.success('Question deleted successfully!');
-            refetchQuestions(); // Fetch questions after deleting
-        } catch (error) {
-            console.error('Error deleting question:', error);
-            toast.error('Error deleting question');
+        if (confirmDelete === questionId) {
+            try {
+                await deleteQuestion({
+                    courseId,
+                    yearId,
+                    subjectId,
+                    questionId,
+                }).unwrap();
+                toast.success('Question deleted successfully!');
+    
+                setConfirmDelete(null);
+            } catch (error) {
+                console.error('Error deleting question:', error);
+                toast.error('Error deleting question');
+            }
+        } else {
+            setConfirmDelete(questionId);
         }
     };
-
 
     //new
 
     const handleTagInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setTagInput(e.target.value);
     };
-    
+
     const handleTagInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter' || e.key === ',') {
             e.preventDefault();
             addTag();
         }
     };
-    
+
     const addTag = () => {
         const trimmedInput = tagInput.trim();
         if (trimmedInput && !questiontag.includes(trimmedInput)) {
@@ -667,7 +687,7 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ courseId, yearId, sub
             setTagInput('');
         }
     };
-    
+
     const removeTag = (tagToRemove: string) => {
         setQuestiontag(questiontag.filter(tag => tag !== tagToRemove));
     };
@@ -833,26 +853,26 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ courseId, yearId, sub
                             />
                         </div> */}
                         <div className="mb-4">
-    <label className="block text-sm font-medium text-gray-700">Question Tags</label>
-    <div className="flex flex-wrap gap-2 mb-2">
-        {questiontag.map((tag, index) => (
-            <span key={index} className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded flex items-center">
-                {tag}
-                <button type="button" onClick={() => removeTag(tag)} className="ml-1 text-blue-600 hover:text-blue-800">
-                    &times;
-                </button>
-            </span>
-        ))}
-    </div>
-    <input
-        type="text"
-        value={tagInput}
-        onChange={handleTagInputChange}
-        onKeyDown={handleTagInputKeyDown}
-        className="mt-1 block w-full border border-gray-300 rounded p-2"
-        placeholder="Type a tag and press Enter or comma to add"
-    />
-</div>
+                            <label className="block text-sm font-medium text-gray-700">Question Tags</label>
+                            <div className="flex flex-wrap gap-2 mb-2">
+                                {questiontag.map((tag, index) => (
+                                    <span key={index} className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded flex items-center">
+                                        {tag}
+                                        <button type="button" onClick={() => removeTag(tag)} className="ml-1 text-blue-600 hover:text-blue-800">
+                                            &times;
+                                        </button>
+                                    </span>
+                                ))}
+                            </div>
+                            <input
+                                type="text"
+                                value={tagInput}
+                                onChange={handleTagInputChange}
+                                onKeyDown={handleTagInputKeyDown}
+                                className="mt-1 block w-full border border-gray-300 rounded p-2"
+                                placeholder="Type a tag and press Enter or comma to add"
+                            />
+                        </div>
 
 
                         <button
@@ -880,12 +900,12 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ courseId, yearId, sub
                                 <th className="py-2">Answer Text</th>
                                 <th className="py-2">Answer Image</th>
                                 <th className="py-2">Video Link</th>
-                                 <th className="py-2">Tags</th>    
+                                <th className="py-2">Tags</th>
                                 <th className="py-2">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {questionsData?.questions.map((question:IQuestion, index:number) => (
+                            {questionsData?.questions.map((question: IQuestion, index: number) => (
                                 <tr key={question._id.toString()} className="even:bg-gray-50">
                                     <td className="border px-4 py-2">{index + 1}</td>
                                     <td className="border px-4 py-2">{question.questionText}</td>
@@ -916,7 +936,7 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ courseId, yearId, sub
                                         )}
                                     </td>
 
-                                  {/* <td className="border px-4 py-2">
+                                    {/* <td className="border px-4 py-2">
                                         {Array.isArray(question.questiontag) && question.questiontag.length > 0 ? (
                                             <div className="flex flex-wrap gap-1">
                                                 {question.questiontag.map((tag: string, tagIndex: number) => (
@@ -949,12 +969,36 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ courseId, yearId, sub
                                         >
                                             Edit
                                         </button>
-                                        <button
+                                        {/* <button
                                             onClick={() => handleDeleteQuestion(question._id.toString())}
                                             className="text-red-500 hover:underline"
                                         >
                                             Delete
-                                        </button>
+                                        </button> */}
+                                        {confirmDelete === question._id.toString() ? (
+                                            <>
+                                                <span className="text-red-600 mr-2">Are you sure?</span>
+                                                <button
+                                                    onClick={() => handleDeleteQuestion(question._id.toString())}
+                                                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded mr-2"
+                                                >
+                                                    Confirm
+                                                </button>
+                                                <button
+                                                    onClick={() => setConfirmDelete(null)}
+                                                    className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-1 px-2 rounded"
+                                                >
+                                                    Cancel
+                                                </button>
+                                            </>
+                                        ) : (
+                                            <button
+                                                onClick={() => setConfirmDelete(question._id.toString())}
+                                                className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
+                                            >
+                                                Delete
+                                            </button>
+                                        )}
                                         <button
                                             onClick={() => handleInsertUp(index)}
                                             className="text-green-500 hover:underline"

@@ -5,6 +5,7 @@ const nextConfig = {
       "res.cloudinary.com", 
       "solvit-client.vercel.app", 
       "solvit-test-deploy.vercel.app",
+      "gyanoda.com",
       "randomuser.me"  // Add this line
     ],
   },

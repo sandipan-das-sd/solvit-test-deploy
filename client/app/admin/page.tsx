@@ -13,8 +13,8 @@ const page = (props: Props) => {
       <AdminProtected>
         <Heading
           title="Gyanoda - Admin"
-          description="Gyanoda is a platform for students to learn and get help from teachers"
-          keywords="Programming,MERN,Redux,Machine Learning"
+          description="Gyanoda: Your ultimate platform for All-India competitive exam preparation. Access comprehensive past years' solutions with detailed video explanations, attend expert-led doubt clearing classes, and practice with realistic mock tests. Elevate your exam performance with our innovative learning tools and personalized guidance for various competitive exams across India."
+          keywords="Competitve Exams Video Solutions,Competitve Exams,WBJEE,NEET,UPSC,SSC,JEE MAIN.JEE ADVANCED,All India Competitive Exams,Previous Years Questions ,Past 10 Years Solved Papers,Past 10 Years Solved Papaer Video Solution,PYQ'S,Gyanoda App,Engineering Entrance Exams, Medical Entrance Exams, Civil Services Exams, Government Job Exams, Exam Strategies, Test Series, Live Classes, Expert Faculty, Personalized Learning"
         />
         <div className="flex min-h-screen">
           <div className="1500px:w-[16%] w-1/5">
